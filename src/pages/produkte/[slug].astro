@@ -151,6 +151,17 @@ a { color:inherit; text-decoration:none; }
     </div>
 
     <div>
+      <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:24px;">
+        {product.image ? (
+          <img src={product.image} alt={product.name} style="width:100%;height:340px;object-fit:cover;object-position:center;display:block;" />
+        ) : (
+          <div style="width:100%;height:340px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;background:linear-gradient(180deg,#161616,#0d0d0d);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/></svg>
+            <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(255,255,255,0.3);text-transform:uppercase;">PRODUKTBILD</span>
+          </div>
+        )}
+      </div>
+
       <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:24px;">
         <h2 class="headline" style="font-size:20px;margin:0 0 16px;">Spezifikationen</h2>
         <table class="spec-table">

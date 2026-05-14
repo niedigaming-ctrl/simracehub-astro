@@ -364,12 +364,34 @@ img { max-width:100%; display:block; }
       </div>
     </div>
   </footer>
+  <!-- Tweaks Panel -->
+  <div id="twk-panel" style="position:fixed;right:16px;bottom:16px;z-index:9999;width:240px;background:rgba(17,17,17,.92);border:1px solid rgba(255,255,255,0.07);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.4);font-family:var(--mono);font-size:11px;color:var(--text-2);overflow:hidden;display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
+      <span style="font-weight:600;color:var(--text);">Tweaks</span>
+      <span id="twk-x" style="font-size:15px;opacity:.5;cursor:pointer;" onclick="document.getElementById('twk-panel').style.display='none';document.getElementById('twk-trigger').style.opacity='1';">✕</span>
+    </div>
+    <div id="twk-body" style="padding:14px;display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase;">Akzentfarbe</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="setAccent('#ff2d2d')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff2d2d;cursor:pointer;"></button>
+        <button onclick="setAccent('#ff7a00')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff7a00;cursor:pointer;"></button>
+        <button onclick="setAccent('#00d97e')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#00d97e;cursor:pointer;"></button>
+        <button onclick="setAccent('#3b82f6')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#3b82f6;cursor:pointer;"></button>
+        <button onclick="setAccent('#a855f7')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#a855f7;cursor:pointer;"></button>
+        <button onclick="setAccent('#fafafa')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#fafafa;cursor:pointer;"></button>
+      </div>
+    </div>
+  </div>
+  <!-- Tweaks Trigger -->
+  <div id="twk-trigger" style="position:fixed;right:16px;bottom:16px;z-index:9998;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#0a0a0a;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 12px rgba(255,45,45,.3);transition:opacity .2s;" onclick="document.getElementById('twk-panel').style.display='block';this.style.opacity='0';">⚙</div>
   </body>
   </html>
 <script define:vars={{ products }} is:inline>
   const PRODUCTS = products;
   function fmtPrice(p) { return p.toLocaleString('de-DE') + ' €'; }
   function bestShop(p) { const s = [...p.shops].sort((a,b)=>a.price-b.price); return s.find(x=>x.inStock)||s[0]; }
+  window.setAccent = function setAccent(c) { document.documentElement.style.setProperty("--accent-color", c); try { localStorage.setItem("srh_accent", c); } catch(e) {} document.getElementById("twk-trigger").style.background = c; }
+  (function(){ try { var s = localStorage.getItem("srh_accent"); if (s) window.setAccent(s); } catch(e) {} })();
 
   const cards = document.querySelectorAll('.card[data-cat]');
   const searchInput = document.querySelector('input[placeholder]');
