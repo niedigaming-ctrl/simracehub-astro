@@ -1,0 +1,99 @@
+[
+  {
+    "id": 0,
+    "shopKey": "moza_r9",
+    "category": "wheelbase",
+    "url": "https://eu.mozaracing.com/products/r9-wheelbase",
+    "note": "MOZA hat eine separate EU-Domain mit EUR-Preisen — eu.mozaracing.com statt mozaracing.com"
+  },
+  {
+    "id": 1,
+    "shopKey": "fanatec_csl_dd_plus",
+    "category": "wheelbase",
+    "url": "https://www.fanatec.com/eu/en/p/wheel-bases/cs_dd+_eu/clubsport-dd-plus-eu",
+    "note": "Verified: ClubSport DD+ (jetzt 18 Nm nach Firmware-Update)"
+  },
+  {
+    "id": 2,
+    "shopKey": "simucube_2_sport",
+    "category": "wheelbase",
+    "url": "https://simucube.com/simucube-2-sport/",
+    "note": "Bild kommt, Preis muss aus HTML-Fallback geholt werden (kein OG-Preis)"
+  },
+  {
+    "id": 3,
+    "shopKey": "logitech_g_pro",
+    "category": "wheel",
+    "url": "https://www.logitechg.com/en-us/shop/p/pro-racing-wheel",
+    "note": "Logitech blockt fetch — alternative Quelle nötig (z.B. mediamarkt-Listing)",
+    "skipCrawl": true
+  },
+  {
+    "id": 4,
+    "shopKey": "fanatec_formula_v25",
+    "category": "wheel",
+    "url": "https://www.fanatec.com/eu/en/p/steering-wheels/crd-9020012-ww/clubsport-steering-wheel-formula-v2-5",
+    "note": "Formula V2.5 X gibt's nicht mehr — neuer Name: Formula V2"
+  },
+  {
+    "id": 5,
+    "shopKey": "moza_csv2p",
+    "category": "wheel",
+    "url": "https://eu.mozaracing.com/products/cs-v2p-wheel"
+  },
+  {
+    "id": 6,
+    "shopKey": "heusinkveld_sprint",
+    "category": "pedals",
+    "url": "https://heusinkveld.com/shop/sprint-pedals/sprint-3-pedal-set/",
+    "note": "Pfad heißt /sprint-pedals/ NICHT /sim-pedals/ — alte URL führte zu 404"
+  },
+  {
+    "id": 7,
+    "shopKey": "moza_srp_lite",
+    "category": "pedals",
+    "url": "https://eu.mozaracing.com/products/srp-pedals"
+  },
+  {
+    "id": 8,
+    "shopKey": "heusinkveld_handbrake",
+    "category": "shifter",
+    "url": "https://heusinkveld.com/shop/handbrake-shifters/handbrake/",
+    "note": "Pfad ist /handbrake-shifters/, nicht /sim-handbrake/"
+  },
+  {
+    "id": 9,
+    "shopKey": "trakracer_tr8",
+    "category": "cockpit",
+    "url": "https://trakracer.com/products/tr8-pro-racing-simulator-1",
+    "note": "trakracer.com ohne www. Mit www. redirected, was 404 wird"
+  },
+  {
+    "id": 10,
+    "shopKey": "playseat_trophy",
+    "category": "seat",
+    "url": "https://www.playseat.com/en-us/products/playseat-trophy-black",
+    "note": "Playseat-Shop ist unter /shop/, nicht playseatstore.com"
+  },
+  {
+    "id": 11,
+    "shopKey": "lg_34gp950g",
+    "category": "monitor",
+    "url": "https://www.lg.com/de/monitore/lg-34gp950g-b",
+    "note": "Bild + Titel kommen. LG liefert keinen OG-Preis — der wird per JS nachgeladen. Statischer Preis aus products.js bleibt."
+  },
+  {
+    "id": 12,
+    "shopKey": "fanatec_gt_dd_pro_bundle",
+    "category": "bundle",
+    "url": "https://www.fanatec.com/eu/en/p/sim-racing-bundles/crd-9020007-8nm-eu/gran-turismo-dd-pro-8nm-qr2l-eu",
+    "note": "Verified Fanatec-Slug-Pattern: Bundles mit Unterstrich"
+  },
+  {
+    "id": 13,
+    "shopKey": "fanatec_r2r_wrc_5nm",
+    "category": "bundle",
+    "url": "https://www.fanatec.com/eu/en/p/sim-racing-bundles/r2r_csl_dd_qr2_wrc_5nm_eu/csl-dd-qr2-ready2race-wrc-bundle-5nm-eu",
+    "note": "Bereits ok — funktionierte schon im ersten Lauf"
+  }
+]

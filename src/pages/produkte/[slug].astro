@@ -1,0 +1,203 @@
+---
+import data from '../../data/products.json';
+
+export function getStaticPaths() {
+  return data.products.map(p => ({
+    params: { slug: p.slug },
+    props: { product: p }
+  }));
+}
+
+const { product } = Astro.props;
+
+function bestShop(p) {
+  if (!p || !p.shops || !p.shops.length) return null;
+  const sorted = [...p.shops].sort((a,b) => a.price - b.price);
+  return sorted.find(s => s.inStock) || sorted[0];
+}
+function fmtPrice(p) { return p.toLocaleString("de-DE") + " €"; }
+function minPrice(shops) { return Math.min(...shops.filter(s=>s.inStock).map(s=>s.price)); }
+
+const best = bestShop(product);
+const pmin = minPrice(product.shops);
+---
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{product.name} · SimRaceHub</title>
+<meta name="description" content={product.blurb || product.categoryLabel} />
+<meta property="og:title" content={product.name} />
+<meta property="og:description" content={product.categoryLabel} />
+<meta property="og:type" content="product" />
+<link rel="canonical" href={`https://niedigaming-ctrl.github.io/simracehub-astro/produkte/${product.slug}/`} />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{product.name}",
+  "brand": { "@type": "Brand", "name": "{product.brand}" },
+  "description": "{product.categoryLabel}",
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "{product.rating}", "reviewCount": "{product.reviews}" },
+  "offers": { "@type": "Offer", "price": "{pmin}", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+}
+</script>
+<style>
+:root {
+  --bg: #0a0a0a; --panel: #111111; --panel-2: #181818;
+  --line: rgba(255,255,255,0.07); --line-2: rgba(255,255,255,0.16);
+  --text: #fafafa; --text-2: #a0a0a0; --text-3: #5e5e5e;
+  --accent: #ff2d2d;
+  --sans: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --display: 'Barlow Condensed', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
+::selection { background:var(--accent); color:#0a0a0a; }
+a { color:inherit; text-decoration:none; }
+
+.headline { font-family:var(--display); font-weight:700; line-height:0.95; text-transform:uppercase; letter-spacing:-0.005em; }
+.mono { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; }
+
+.btn { display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; border:1px solid var(--line-2); background:transparent; color:var(--text); font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:all .15s; }
+.btn:hover { background:var(--panel-2); border-color:var(--accent); }
+.btn-primary { background:var(--accent); color:#0a0a0a; border-color:var(--accent); font-weight:600; }
+.btn-primary:hover { filter:brightness(1.1); }
+.btn-lg { height:48px; font-size:12px; }
+
+.ribbon { position:absolute; top:14px; left:0; background:var(--accent); color:#0a0a0a; padding:5px 12px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; z-index:2; }
+
+.platform-chip { font-family:var(--mono); font-size:9px; letter-spacing:0.08em; padding:2px 6px; border:1px solid rgba(255,255,255,0.14); color:var(--text-2); text-transform:uppercase; }
+
+.spec-table { width:100%; border-collapse:collapse; }
+.spec-table td { padding:10px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.spec-table td:first-child { color:var(--text-2); width:45%; }
+.spec-table td:last-child { text-align:right; }
+
+.shop-row { display:flex; justify-content:space-between; align-items:center; padding:14px; border-bottom:1px solid var(--line); }
+.shop-row:last-child { border-bottom:none; }
+.shop-row:hover { background:rgba(255,255,255,.04); }
+.shop-row .best { color:var(--accent); font-weight:700; }
+
+.stars { display:inline-flex; align-items:center; gap:2px; }
+
+.card-img { width:100%; height:320px; background:linear-gradient(180deg,#161616,#0d0d0d); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; position:relative; }
+.card-img .cat-icon { opacity:0.32; }
+.card-img .cat-label { font-family:var(--mono); font-size:9px; letter-spacing:0.12em; color:rgba(255,255,255,0.3); text-transform:uppercase; }
+
+@media (max-width:980px) {
+  .detail-grid { grid-template-columns:1fr !important; }
+  header, section { padding-left:20px !important; padding-right:20px !important; }
+}
+</style>
+</head>
+<body>
+
+<div style="background:#000;border-bottom:1px solid var(--line);padding:7px 40px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--text-3);text-transform:uppercase;">
+  <span>● Live · 10/13 Quellen gecrawlt</span>
+  <span style="color:var(--text-2);">* Werbung · Affiliate-Links</span>
+  <span>DE · EUR</span>
+</div>
+
+<header style="padding:20px 40px;display:flex;align-items:center;gap:36;border-bottom:1px solid var(--line);">
+  <a href="/simracehub-astro/" class="headline" style="font-size:26px;display:flex;align-items:center;gap:12;">
+    <svg width="34" height="22" viewBox="0 0 34 22"><path d="M0 22 L8 0 L18 0 L10 22 Z" fill="var(--accent)"/><path d="M14 22 L22 0 L32 0 L24 22 Z" fill="var(--text)"/></svg>
+    SIM<span style="color:var(--accent);">:</span>RACEHUB
+  </a>
+  <nav style="display:flex;gap:28;font-size:13px;color:var(--text-2);">
+    <a href="/simracehub-astro/" style="color:var(--text);">Alle Produkte</a>
+    <a href="/simracehub-astro/" style="color:var(--text-2);">Kaufberater</a>
+  </nav>
+</header>
+
+<section style="padding:40px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;" class="detail-grid">
+    <div>
+      {product.tag && <div class="ribbon">{product.tag}</div>}
+      <div class="card-img" style="height:400px;margin-bottom:24px;">
+        <svg class="cat-icon" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6">
+          {product.category==="wheelbase" && <><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></>}
+          {product.category==="wheel" && <><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4v3M12 17v3"/></>}
+          {product.category==="pedals" && <><rect x="4" y="6" width="4" height="12" rx="1"/><rect x="10" y="4" width="4" height="14" rx="1"/><rect x="16" y="6" width="4" height="12" rx="1"/></>}
+          {product.category==="cockpit" && <><path d="M4 18l4-12h8l4 12"/></>}
+          {product.category==="bundle" && <><rect x="3" y="8" width="18" height="12" rx="1"/><path d="M3 12h18"/></>}
+        </svg>
+        <div class="cat-label">{product.categoryLabel}</div>
+      </div>
+      <div class="mono" style="font-size:9px;color:var(--text-2);margin-bottom:4px;">{product.brand}</div>
+      <h1 class="headline" style="font-size:42px;margin:0 0 12px;">{product.name}</h1>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <span class="stars">
+          {[1,2,3,4,5].map(s => (
+            <svg key={s} width="16" height="16" viewBox="0 0 24 24">
+              <path d="M12 2l3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z" fill={s <= Math.round(product.rating) ? "var(--accent)" : "rgba(255,255,255,0.15)"}/>
+            </svg>
+          ))}
+        </span>
+        <span class="mono" style="color:var(--text-2);">{product.rating.toFixed(1)} ({product.reviews} Reviews)</span>
+      </div>
+      <div class="platforms" style="display:flex;gap:6px;margin-bottom:24px;">
+        {product.platforms.map(pl => <span class="platform-chip">{pl}</span>)}
+      </div>
+      <p style="font-size:15px;color:var(--text-2);line-height:1.7;margin-bottom:32px;">{product.blurb || product.categoryLabel}</p>
+      
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;">
+        <a href={best?.url || "#"} class="btn btn-primary btn-lg" target="_blank" rel="nofollow">Zum Bestpreis</a>
+        <div class="btn btn-lg" style="cursor:default;">
+          <span class="headline" style="font-size:20px;color:var(--accent);">{fmtPrice(pmin)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:24px;">
+        <h2 class="headline" style="font-size:20px;margin:0 0 16px;">Spezifikationen</h2>
+        <table class="spec-table">
+          {product.specs.map(([k,v]) => (
+            <tr><td>{k}</td><td>{v}</td></tr>
+          ))}
+          <tr><td>Marke</td><td>{product.brand}</td></tr>
+          <tr><td>Kategorie</td><td>{product.categoryLabel}</td></tr>
+          <tr><td>Plattform</td><td>{product.platforms.join(", ")}</td></tr>
+        </table>
+      </div>
+
+      <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;">
+        <div style="padding:16px;border-bottom:1px solid var(--line);">
+          <h2 class="headline" style="font-size:18px;margin:0;">Live-Preise</h2>
+        </div>
+        {product.shops.map((shop, i) => {
+          const isBest = shop.price === pmin && shop.inStock;
+          return (
+            <div class="shop-row">
+              <div>
+                <div style="font-weight:600;">{shop.name}</div>
+                {shop.badge && <div class="mono" style="font-size:8px;color:var(--text-3);margin-top:4px;">{shop.badge}</div>}
+              </div>
+              <div style="text-align:right;">
+                <div class={isBest ? "best headline" : ""} style="font-size:18px;">{fmtPrice(shop.price)}</div>
+                {isBest && <div class="mono" style="font-size:8px;color:var(--accent);">✓ Bestpreis</div>}
+                {!shop.inStock && <div class="mono" style="font-size:8px;color:var(--text-3);">Nicht lieferbar</div>}
+              </div>
+              <div>
+                {shop.inStock ? (
+                  <a href={shop.url || "#"} class="btn btn-primary" target="_blank" rel="nofollow">Zum Shop →</a>
+                ) : (
+                  <span class="btn" style="opacity:.4;cursor:not-allowed;">Ausverkauft</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--bg);border-top:1px solid var(--line);padding:40px;text-align:center;color:var(--text-2);font-size:13px;">
+  <div class="headline" style="font-size:20px;margin-bottom:12px;">SIM<span style="color:var(--accent);">:</span>RACEHUB</div>
+  <p>Unabhängige Kaufberatung für Sim Racing.</p>
+</footer>
+</body>
+</html>
