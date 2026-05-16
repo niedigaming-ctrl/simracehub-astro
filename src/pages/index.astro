@@ -1,7 +1,8 @@
 ---
+// index.astro — SimRaceHub Startseite (Content only, Layout comes from BaseLayout)
+import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/products.json';
 
-// helpers
 function bestShop(p) {
   if (!p || !p.shops || !p.shops.length) return null;
   const sorted = [...p.shops].sort((a,b) => a.price - b.price);
@@ -11,745 +12,230 @@ function fmtPrice(p) { return p.toLocaleString("de-DE") + " €"; }
 function minPrice(shops) { return Math.min(...shops.filter(s=>s.inStock).map(s=>s.price)); }
 function maxPrice(shops) { return Math.max(...shops.filter(s=>s.inStock).map(s=>s.price)); }
 
-const {hero, products, categories} = data;
+const { hero, products, categories } = data;
 const heroBest = bestShop(hero);
 const heroMin = minPrice(hero.shops);
 const heroMax = maxPrice(hero.shops);
-
 const productsJson = JSON.stringify(products);
 ---
-<html lang="de">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SimRaceHub · Sim Racing Kaufberatung & Preisvergleich</title>
-<meta name="description" content="Unabhängige Kaufberatung für Sim Racing. Live-Preise von Amazon, Caseking, Alternate & mehr. Vergleiche 13+ Produkte für Wheelbase, Lenkrad, Pedale & Cockpit." />
-<meta name="keywords" content="Sim Racing, Wheelbase, Direct Drive, Fanatec, MOZA, Simucube, Logitech, Kaufberatung" />
-<meta property="og:title" content="SimRaceHub · Sim Racing Kaufberatung" />
-<meta property="og:description" content="Live-Preise, Tests & Vergleiche für Sim Racing Hardware." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://niedigaming-ctrl.github.io/simracehub-astro/" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SimRaceHub",
-  "description": "Sim Racing Kaufberatung & Preisvergleich"
-}
-</script>
-<style>
-:root {
-  --bg: #0a0a0a;
-  --panel: #111111;
-  --panel-2: #181818;
-  --line: rgba(255,255,255,0.07);
-  --line-2: rgba(255,255,255,0.16);
-  --text: #fafafa;
-  --text-2: #a0a0a0;
-  --text-3: #5e5e5e;
-  --accent: #ff2d2d;
-  --sans: 'Inter', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --display: 'Barlow Condensed', sans-serif;
-}
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.5; }
-::selection { background:var(--accent); color:#0a0a0a; }
-a { color:inherit; text-decoration:none; }
-img { max-width:100%; display:block; }
 
-.headline { font-family:var(--display); font-weight:700; line-height:0.95; text-transform:uppercase; letter-spacing:-0.005em; }
-.mono { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; }
+<BaseLayout
+  title="SimRaceHub · Sim Racing Kaufberatung & Preisvergleich"
+  description="Unabhängige Kaufberatung für Sim Racing. Live-Preise von Amazon, Caseking, Alternate & mehr. Vergleiche 13+ Produkte für Wheelbase, Lenkrad, Pedale & Cockpit."
+  noindex={false}
+>
+  <!-- Products data for JS -->
+  <script type="application/json" id="srh-products-data">{productsJson}</script>
+  <script type="application/ld+json" is:inline>
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SimRaceHub",
+    "description": "Sim Racing Kaufberatung & Preisvergleich"
+  }
+  </script>
 
-.btn { display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; border:1px solid var(--line-2); background:transparent; color:var(--text); font-family:var(--mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:all .15s; text-decoration:none; }
-.btn:hover { background:var(--panel-2); border-color:var(--accent); }
-.btn-primary { background:var(--accent); color:#0a0a0a; border-color:var(--accent); font-weight:600; }
-.btn-primary:hover { filter:brightness(1.1); }
-
-.pill { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; background:transparent; border:1px solid var(--line); color:var(--text-2); font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:all .12s; white-space:nowrap; }
-.pill:hover { color:var(--text); border-color:var(--line-2); }
-.pill.active { background:var(--text); color:#0a0a0a; border-color:var(--text); font-weight:600; }
-
-.card { background:var(--panel); border:1px solid var(--line); position:relative; transition:all .2s; display:flex; flex-direction:column; overflow:visible; }
-.card:hover { border-color:var(--accent); transform:translateY(-3px); }
-.card-ribbon { position:absolute; top:14px; left:0; background:var(--accent); color:#0a0a0a; padding:5px 12px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; z-index:2; }
-
-.spec-row { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:12px; }
-.spec-row:last-child { border-bottom:none; }
-
-.shop-list { background:#0a0a0a; border:1px solid var(--accent); z-index:50; padding:0; box-shadow:0 8px 24px rgba(0,0,0,.6); display:none; }
-.shop-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line); text-decoration:none; color:var(--text); transition:background .12s; }
-.shop-row:last-child { border-bottom:none; }
-.shop-row:hover { background:rgba(255,255,255,.04); }
-
-.platform-chip { font-family:var(--mono); font-size:9px; letter-spacing:0.08em; padding:2px 6px; border:1px solid rgba(255,255,255,0.14); color:var(--text-2); text-transform:uppercase; }
-
-.card-img { width:100%; height:180px; background:linear-gradient(180deg,#161616,#0d0d0d); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; position:relative; }
-.card-img .cat-icon { opacity:0.32; }
-.card-img .cat-label { font-family:var(--mono); font-size:9px; letter-spacing:0.12em; color:rgba(255,255,255,0.3); text-transform:uppercase; }
-.card-img .live-badge { position:absolute; left:12px; top:12px; font-family:var(--mono); font-size:8px; letter-spacing:0.16em; color:rgba(255,255,255,0.3); }
-
-.stars { display:inline-flex; align-items:center; gap:2px; }
-.star { color:rgba(255,255,255,0.15); }
-.star.filled { color:var(--accent); }
-
-.platforms { display:flex; gap:4px; }
-
-@media (max-width:980px) {
-  header, section, footer { padding-left:20px !important; padding-right:20px !important; }
-  .hero-grid { grid-template-columns:1fr !important; }
-  .prod-grid { grid-template-columns:repeat(2,1fr) !important; }
-  .detail-grid { grid-template-columns:1fr !important; }
-}
-@media (max-width:620px) {
-  .prod-grid { grid-template-columns:1fr !important; }
-  .headline-84 { font-size:54px !important; }
-}
-</style>
-</head>
-<body>
-
-<div style="background:#000;border-bottom:1px solid var(--line);padding:7px 40px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--text-3);text-transform:uppercase;gap:12;flex-wrap:wrap;">
-  <span class="mono" style="color:var(--accent);font-size:9px;">● Live · 10/13 Quellen gecrawlt</span>
-  <span style="color:var(--text-2);font-size:9px;">* Werbung · Affiliate-Links · Wir erhalten ggf. Provision</span>
-  <span style="font-size:9px;">DE · EUR · Versand DE/AT/CH</span>
-</div>
-
-<header style="padding:20px 40px;display:flex;align-items:center;gap:36;border-bottom:1px solid var(--line);flex-wrap:wrap;">
-  <a href="/simracehub-astro/" class="headline" style="font-size:26px;display:flex;align-items:center;gap:12;">
-    <svg width="34" height="22" viewBox="0 0 34 22"><path d="M0 22 L8 0 L18 0 L10 22 Z" fill="var(--accent)"/><path d="M14 22 L22 0 L32 0 L24 22 Z" fill="var(--text)"/></svg>
-    SIM<span style="color:var(--accent);">:</span>RACEHUB
-  </a>
-  <nav style="display:flex;gap:28;font-size:13px;color:var(--text-2);flex-wrap:wrap;">
-    <a href="/simracehub-astro/" style="color:var(--text);">Alle Produkte</a>
-    <a href="#" data-action="bestof" style="color:var(--text-2);">Best of 2026</a>
-    <a href="#" data-action="quiz" style="color:var(--text-2);">Kaufberater</a>
-    <a href="#" data-action="compare" style="color:var(--text-2);">Vergleich</a>
-    <a href="#magazin" style="color:var(--text-2);">Magazin</a>
-  </nav>
-  <div style="flex:1;min-width:240px;max-width:340px;margin-left:auto;position:relative;">
-    <input class="btn" placeholder="Direct Drive unter 500€..." style="width:100%;text-align:left;padding-left:36px;font-family:var(--sans);font-size:13px;background:var(--panel);cursor:text;" />
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" style="position:absolute;left:14px;top:12px;pointer-events:none;"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-  </div>
-  <a href="/simracehub-astro/" class="btn btn-primary" style="font-size:11px;">
-    <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-    Quiz starten
-  </a>
-</header>
-
-<!-- HERO -->
-<section style="padding:40px 40px 30px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;border-bottom:1px solid var(--line);" class="hero-grid">
-  <div>
-    <div class="mono" style="font-size:11px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;">
-      <span style="width:24px;height:1px;background:var(--accent);"></span>
-      EDITOR'S PICK · {hero.badge}
-    </div>
-    <h1 class="headline" style="font-size:84px;margin:0 0 18px;line-height:0.95;" class="headline-84">
-      {hero.name.split(" ")[0]} {hero.name.split(" ")[1]}<br/>
-      <span style="color:var(--accent);">{hero.name.split(" ").slice(2).join(" ")}</span>
-    </h1>
-    <p style="margin:0 0 24px;font-size:15px;color:var(--text-2);max-width:480px;line-height:1.6;">{hero.blurb}</p>
-    <div style="display:grid;grid-template-columns:repeat(3,auto);gap:32px;margin-bottom:32px;">
-      {hero.specs.map(([k,v]) => (
-        <div key={k}>
-          <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;">{k}</div>
-          <div class="headline" style="font-size:24px;">{v}</div>
-        </div>
-      ))}
-    </div>
-    <div style="display:flex;align-items:center;gap:18px;margin-bottom:24px;">
-      <div>
-        <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.14em;text-transform:uppercase;">
-          Bestpreis · {hero.shops.length} Shops · bei <span style="color:var(--text-2);">{heroBest?.name}</span>
-        </div>
-        <div style="display:flex;align-items:baseline;gap:14px;">
-          <span class="headline" style="font-size:42px;color:var(--accent);">{fmtPrice(heroBest?.price || 0)}</span>
-          {hero.shops.length > 1 && <span class="mono" style="color:var(--text-3);font-size:13px;">bis {fmtPrice(heroMax)}</span>}
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn btn-primary" style="height:48px;font-size:12px;">Zum Bestpreis</a>
-      <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn" style="height:48px;">Alle {hero.shops.length} Shops
-        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </a>
-    </div>
-  </div>
-  <div style="position:relative;">
-    <div style="position:relative;z-index:1;border:1px solid var(--line-2);">
-      <div class="card-img" style={`height:420px;${hero.image ? `background-image:url('${hero.image}');background-size:cover;background-position:center;` : ''}`}>
-        {!hero.image && <svg class="cat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></svg>}
-        <div class="cat-label">{hero.categoryLabel}</div>
-        <div class="live-badge">// PRODUKTBILD</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FILTERS -->
-<section style="padding:24px 40px;border-bottom:1px solid var(--line);">
-  <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
+  <!-- HERO -->
+  <section style="padding:40px 40px 30px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;border-bottom:1px solid var(--line);" class="hero-grid">
     <div>
-      <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Kategorie</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="pill active" data-cat="all">Alle ({products.length})</span>
-        {categories.slice(0,6).map(c => {
-          const n = products.filter(p => p.category === c.id).length;
-          return <span class="pill" data-cat={c.id}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:.6;margin-right:4px;vertical-align:-2px;"><circle cx="12" cy="12" r="4"/></svg>{c.label} <span style="opacity:.55">{n}</span></span>;
-        })}
+      <div class="mono" style="font-size:11px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;">
+        <span style="width:24px;height:1px;background:var(--accent);"></span>
+        EDITOR'S PICK · {hero.badge}
       </div>
-    </div>
-    <div>
-      <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Budget</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="pill active" data-budget="all">Alle</span>
-        <span class="pill" data-budget="under200">&lt; 200 €</span>
-        <span class="pill" data-budget="200-500">200–500 €</span>
-        <span class="pill" data-budget="500-1000">500–1000 €</span>
-        <span class="pill" data-budget="1000plus">1000+ €</span>
-      </div>
-    </div>
-    <div>
-      <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Plattform</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="pill active" data-platform="all">Alle</span>
-        <span class="pill" data-platform="pc">PC</span>
-        <span class="pill" data-platform="xbox">Xbox</span>
-        <span class="pill" data-platform="ps5">PS5</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUCT GRID -->
-<section style="padding:40px 40px 60px;">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px;gap:16px;flex-wrap:wrap;">
-    <div>
-      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;">// TOP-PICKS · Mai 2026</div>
-      <h2 class="headline" style="font-size:38px;margin:0;">{products.length} Produkte. Handverlesen.</h2>
-    </div>
-    <a href="/simracehub-astro/compare" class="mono" style="font-size:11px;color:var(--text-2);text-decoration:none;letter-spacing:0.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;" data-action="compare-all">
-      Vollständiger Vergleich
-      <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-    </a>
-  </div>
-
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;" class="prod-grid">
-    {products.sort((a,b)=>b.rating - a.rating).map((p,i) => {
-      const best = bestShop(p);
-      const pmin = minPrice(p.shops);
-      const pmax = maxPrice(p.shops);
-      const slug = p.slug;
-      return (
-        <div class="card" data-cat={p.category} data-price={pmin} data-platform={p.platforms.join(',')} data-name={p.name.toLowerCase()} data-slug={slug}>
-          {p.tag && <div class="card-ribbon">{p.tag}</div>}
-          <div style="position:absolute;right:8px;top:8px;z-index:10;display:flex;gap:4px;">
-            <button class="compare-btn" data-id={p.id} title="Vergleichen" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">⚖</button>
-            <button class="fav-btn" data-id={p.id} title="Favorit" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">♡</button>
+      <h1 class="headline headline-84" style="font-size:84px;margin:0 0 18px;line-height:0.95;">
+        {hero.name.split(" ")[0]} {hero.name.split(" ")[1]}<br/>
+        <span style="color:var(--accent);">{hero.name.split(" ").slice(2).join(" ")}</span>
+      </h1>
+      <p style="margin:0 0 24px;font-size:15px;color:var(--text-2);max-width:480px;line-height:1.6;">{hero.blurb}</p>
+      <div style="display:grid;grid-template-columns:repeat(3,auto);gap:32px;margin-bottom:32px;">
+        {hero.specs.map(([k,v]) => (
+          <div>
+            <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;">{k}</div>
+            <div class="headline" style="font-size:24px;">{v}</div>
           </div>
-          <a href={`/simracehub-astro/produkte/${slug}/`} style="text-decoration:none;color:var(--text);display:block;">
-          <div class="card-img" style={p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : ''}>
-            {!p.image && <svg class="cat-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              {p.category==="wheelbase" && <><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></>}
-              {p.category==="wheel" && <><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4v3M12 17v3M7 7l2 2M17 17l-2-2"/></>}
-              {p.category==="pedals" && <><rect x="4" y="6" width="4" height="12" rx="1"/><rect x="10" y="4" width="4" height="14" rx="1"/><rect x="16" y="6" width="4" height="12" rx="1"/></>}
-              {p.category==="shifter" && <><circle cx="12" cy="6" r="2"/><path d="M12 8v10M8 18h8"/></>}
-              {p.category==="cockpit" && <><path d="M4 18l4-12h8l4 12M7 14h10M9 18v3M15 18v3"/></>}
-              {p.category==="monitor" && <><rect x="3" y="6" width="6" height="10" rx="0.5"/><rect x="9" y="4" width="6" height="14" rx="0.5"/><rect x="15" y="6" width="6" height="10" rx="0.5"/></>}
-              {p.category==="seat" && <><path d="M7 4h6a3 3 0 0 1 3 3v9H7zM7 16v4M16 16v4"/></>}
-              {p.category==="bundle" && <><rect x="3" y="8" width="18" height="12" rx="1"/><path d="M3 12h18M9 8v-3h6v3"/></>}
-            </svg>}
-            <div class="cat-label">{p.categoryLabel}</div>
-            <div class="live-badge">// LIVE #{String(i+2).padStart(2,'0')}</div>
+        ))}
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;margin-bottom:24px;">
+        <div>
+          <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.14em;text-transform:uppercase;">
+            Bestpreis · {hero.shops.length} Shops · bei <span style="color:var(--text-2);">{heroBest?.name}</span>
           </div>
-          <div style="padding:16px;flex:1;display:flex;flex-direction:column;">
-            <div class="mono" style="font-size:9px;color:var(--text-2);margin-bottom:4px;">{p.brand}</div>
-            <h3 style="font-size:15px;font-weight:600;margin:0 0 6px;">{p.name}</h3>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-              <span class="stars">
-                {[1,2,3,4,5].map(s => (
-                  <svg key={s} width="12" height="12" viewBox="0 0 24 24" style="display:block;">
-                    <path d="M12 2l3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z" fill={s <= Math.round(p.rating) ? "var(--accent)" : "rgba(255,255,255,0.15)"}/>
-                  </svg>
-                ))}
-              </span>
-              <span class="mono" style="font-size:9px;color:var(--text-2);">{p.rating.toFixed(1)} ({p.reviews})</span>
-            </div>
-            <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Best für {p.bestFor}</div>
-            <div class="platforms" style="margin-bottom:12px;">
-              {p.platforms.map(pl => <span class="platform-chip">{pl}</span>)}
-            </div>
-            <div style="margin-top:auto;">
-              <div style="display:flex;align-items:baseline;gap:8px;">
-                <span class="headline" style="font-size:16px;color:var(--accent);">{fmtPrice(pmin)}</span>
-                {p.shops.length > 1 && <span class="mono" style="font-size:9px;color:var(--text-3);">ab · {p.shops.filter(s=>s.inStock).length} Shops</span>}
-              </div>
-            </div>
-          </div>
-          </a>
-          <div style="padding:0 16px 14px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;">
-              <span class="shop-count-btn btn" style="height:30px;padding:0 10px;font-size:10px;cursor:pointer;" data-slug={slug}>Preise ({p.shops.length})</span>
-              <a href={`/simracehub-astro/produkte/${slug}/`} class="btn" style="height:30px;padding:0 10px;font-size:10px;">→</a>
-            </div>
+          <div style="display:flex;align-items:baseline;gap:14px;">
+            <span class="headline" style="font-size:42px;color:var(--accent);">{fmtPrice(heroBest?.price || 0)}</span>
+            {hero.shops.length > 1 && <span class="mono" style="color:var(--text-3);font-size:13px;">bis {fmtPrice(heroMax)}</span>}
           </div>
         </div>
-      );
-    })}
-  </div>
-
-  {/* ---- FEATURE SECTIONS ---- */}
-  <section id="features" style="padding:60px 40px;border-top:1px solid var(--line);">
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
-      {/* Kaufberater */}
-      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
-        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">KAUFBERATER</div>
-        <div class="headline" style="font-size:28px;">Unentschieden?</div>
-        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Beantworte 7 schnelle Fragen und wir zeigen dir das perfekte Setup für dein Budget.</p>
-        <a href="#" class="btn btn-primary" style="margin-top:auto;">Quiz starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
       </div>
-      
-      {/* Vergleich */}
-      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
-        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">VERGLEICHEN</div>
-        <div class="headline" style="font-size:28px;">Side-by-Side</div>
-        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Wähle bis zu 4 Produkte und vergleiche Specs, Preise und Plattformen direkt nebeneinander.</p>
-        <a href="#" class="btn" style="margin-top:auto;">Vergleich starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn btn-primary" style="height:48px;font-size:12px;">Zum Bestpreis</a>
+        <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn" style="height:48px;">Alle {hero.shops.length} Shops
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
       </div>
-      
-      {/* Best of 2026 */}
-      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
-        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">BEST OF 2026</div>
-        <div class="headline" style="font-size:28px;">Die Gewinner</div>
-        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Unsere Top-Picks je Kategorie — basierend auf Tests, Community-Feedback und Preis-Leistung.</p>
-        <a href="#" class="btn" style="margin-top:auto;">Top-Liste <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+    </div>
+    <div style="position:relative;">
+      <div style="position:relative;z-index:1;border:1px solid var(--line-2);">
+        <div class="card-img" style={`height:420px;${hero.image ? `background-image:url('${hero.image}');background-size:cover;background-position:center;` : ''}`}>
+          {!hero.image && <svg class="cat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></svg>}
+          <div class="cat-label">{hero.categoryLabel}</div>
+          <div class="live-badge">// PRODUKTBILD</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <footer style="background:var(--bg);border-top:1px solid var(--line);padding:60px 40px;">
-    <div style="max-width:980px;margin:0 auto;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px;margin-bottom:40px;">
-        <div>
-          <div class="headline" style="font-size:20px;margin-bottom:16px;">SIM<span style="color:var(--accent);">:</span>RACEHUB</div>
-          <p style="color:var(--text-2);font-size:13px;max-width:400px;line-height:1.6;margin:0;">Unabhängige Kaufberatung für Sim Racing. Alle Preise live von Amazon, Alternate, Caseking &amp; mehr. Wenn du über unsere Links kaufst, erhalten wir eine kleine Provision — für dich ändert sich am Preis nichts.</p>
-        </div>
-        
-        <div style="display:flex;gap:60px;">
-          <div>
-            <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;letter-spacing:0.16em;">NAVIGATION</div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <a href="/simracehub-astro/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Alle Produkte</a>
-              <a href="#" data-action="bestof" style="color:var(--text-2);font-size:13px;text-decoration:none;">Best of 2026</a>
-              <a href="#" data-action="quiz" style="color:var(--text-2);font-size:13px;text-decoration:none;">Kaufberater</a>
-              <a href="#" data-action="compare" style="color:var(--text-2);font-size:13px;text-decoration:none;">Vergleich</a>
-              <a href="#magazin" style="color:var(--text-2);font-size:13px;text-decoration:none;">Magazin</a>
-            </div>
-          </div>
-          
-          <div>
-            <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;letter-spacing:0.16em;">RECHTLICHES</div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <a href="#" style="color:var(--text-2);font-size:13px;text-decoration:none;">Impressum</a>
-              <a href="#" style="color:var(--text-2);font-size:13px;text-decoration:none;">Datenschutz</a>
-              <a href="#" style="color:var(--text-2);font-size:13px;text-decoration:none;">Affiliate-Disclosure</a>
-            </div>
-          </div>
+  <!-- FILTERS -->
+  <section style="padding:24px 40px;border-bottom:1px solid var(--line);">
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Kategorie</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-cat="all">Alle ({products.length})</span>
+          {categories.slice(0,6).map(c => {
+            const n = products.filter(p => p.category === c.id).length;
+            return <span class="pill" data-cat={c.id}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:.6;margin-right:4px;vertical-align:-2px;"><circle cx="12" cy="12" r="4"/></svg>{c.label} <span style="opacity:.55">{n}</span></span>;
+          })}
         </div>
       </div>
-      
-      <div style="border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-        <span class="mono" style="font-size:9px;color:var(--text-3);">© 2026 SimRaceHub · Alle Angaben ohne Gewähr</span>
-        <span class="mono" style="font-size:9px;color:var(--text-3);">Made with 🏎️ in Germany</span>
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Budget</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-budget="all">Alle</span>
+          <span class="pill" data-budget="under200">&lt; 200 €</span>
+          <span class="pill" data-budget="200-500">200–500 €</span>
+          <span class="pill" data-budget="500-1000">500–1000 €</span>
+          <span class="pill" data-budget="1000plus">1000+ €</span>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Plattform</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-platform="all">Alle</span>
+          <span class="pill" data-platform="pc">PC</span>
+          <span class="pill" data-platform="xbox">Xbox</span>
+          <span class="pill" data-platform="ps5">PS5</span>
+        </div>
       </div>
     </div>
-  </footer>
-  <!-- Tweaks Panel -->
-  <div id="twk-panel" style="position:fixed;right:16px;bottom:16px;z-index:9999;width:240px;background:rgba(17,17,17,.92);border:1px solid rgba(255,255,255,0.07);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.4);font-family:var(--mono);font-size:11px;color:var(--text-2);overflow:hidden;display:none;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
-      <span style="font-weight:600;color:var(--text);">Tweaks</span>
-      <span id="twk-x" style="font-size:15px;opacity:.5;cursor:pointer;" onclick="document.getElementById('twk-panel').style.display='none';document.getElementById('twk-trigger').style.opacity='1';">✕</span>
-    </div>
-    <div id="twk-body" style="padding:14px;display:flex;flex-direction:column;gap:12px;">
-      <div style="font-size:9px;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase;">Akzentfarbe</div>
-      <div style="display:flex;gap:6px;">
-        <button onclick="setAccent('#ff2d2d')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff2d2d;cursor:pointer;"></button>
-        <button onclick="setAccent('#ff7a00')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff7a00;cursor:pointer;"></button>
-        <button onclick="setAccent('#00d97e')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#00d97e;cursor:pointer;"></button>
-        <button onclick="setAccent('#3b82f6')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#3b82f6;cursor:pointer;"></button>
-        <button onclick="setAccent('#a855f7')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#a855f7;cursor:pointer;"></button>
-        <button onclick="setAccent('#fafafa')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#fafafa;cursor:pointer;"></button>
+  </section>
+
+  <!-- PRODUCT GRID -->
+  <section style="padding:40px 40px 60px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;">// TOP-PICKS · Mai 2026</div>
+        <h2 class="headline" style="font-size:38px;margin:0;">{products.length} Produkte. Handverlesen.</h2>
       </div>
+      <a href="/simracehub-astro/compare/" class="mono" style="font-size:11px;color:var(--text-2);text-decoration:none;letter-spacing:0.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;" data-action="compare-all">
+        Vollständiger Vergleich
+        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
     </div>
-  </div>
-  <!-- Tweaks Trigger -->
-  <div id="twk-trigger" style="position:fixed;right:16px;bottom:16px;z-index:9998;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#0a0a0a;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 12px rgba(255,45,45,.3);transition:opacity .2s;" onclick="document.getElementById('twk-panel').style.display='block';this.style.opacity='0';">⚙</div>
-  </body>
-  </html>
-<script define:vars={{ products }} is:inline>
-  const PRODUCTS = products;
-  function fmtPrice(p) { return p.toLocaleString('de-DE') + ' €'; }
-  function bestShop(p) { const s = [...p.shops].sort((a,b)=>a.price-b.price); return s.find(x=>x.inStock)||s[0]; }
-  window.setAccent = function setAccent(c) { document.documentElement.style.setProperty("--accent-color", c); try { localStorage.setItem("srh_accent", c); } catch(e) {} document.getElementById("twk-trigger").style.background = c; }
-  (function(){ try { var s = localStorage.getItem("srh_accent"); if (s) window.setAccent(s); } catch(e) {} })();
 
-  const cards = document.querySelectorAll('.card[data-cat]');
-  const searchInput = document.querySelector('input[placeholder]');
-  let activeCat = 'all', activeBudget = 'all', activePlatform = 'all', searchQuery = '';
-
-  function setActive(selector, val, key) {
-    document.querySelectorAll(selector).forEach(p => p.classList.toggle('active', p.dataset[key] === val));
-  }
-
-  function filter() {
-    let visible = 0;
-    cards.forEach(card => {
-      const cat = card.dataset.cat;
-      const price = parseFloat(card.dataset.price);
-      const platforms = card.dataset.platform.toLowerCase().split(',');
-      const name = card.dataset.name;
-
-      const catMatch = activeCat === 'all' || cat === activeCat;
-      let budgetMatch = activeBudget === 'all';
-      if (!budgetMatch) {
-        if (activeBudget === 'under200') budgetMatch = price < 200;
-        else if (activeBudget === '200-500') budgetMatch = price >= 200 && price <= 500;
-        else if (activeBudget === '500-1000') budgetMatch = price > 500 && price <= 1000;
-        else if (activeBudget === '1000plus') budgetMatch = price > 1000;
-      }
-      const platMatch = activePlatform === 'all' || platforms.includes(activePlatform);
-      const searchMatch = !searchQuery || name.includes(searchQuery.toLowerCase());
-
-      const show = catMatch && budgetMatch && platMatch && searchMatch;
-      card.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-    const h2 = document.querySelector('h2.headline');
-    if (h2) h2.textContent = visible + ' Produkte. Handverlesen.';
-  }
-
-  /* ---- EVENT DELEGATION ---- */
-  document.addEventListener('click', e => {
-    const pill = e.target.closest('.pill[data-cat], .pill[data-budget], .pill[data-platform]');
-    if (!pill) return;
-    if (pill.dataset.cat) { activeCat = pill.dataset.cat; setActive('.pill[data-cat]', activeCat, 'cat'); }
-    if (pill.dataset.budget) { activeBudget = pill.dataset.budget; setActive('.pill[data-budget]', activeBudget, 'budget'); }
-    if (pill.dataset.platform) { activePlatform = pill.dataset.platform; setActive('.pill[data-platform]', activePlatform, 'platform'); }
-    filter();
-  }, true);
-
-  if (searchInput) {
-    searchInput.addEventListener('input', e => { searchQuery = e.target.value; filter(); });
-  }
-
-  /* ---- SHOP POPUP ---- */
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;display:none;justify-content:center;align-items:center;backdrop-filter:blur(4px);';
-  overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
-  document.body.appendChild(overlay);
-
-  const popup = document.createElement('div');
-  popup.style.cssText = 'background:#111;border:1px solid rgba(255,255,255,0.12);width:90%;max-width:520px;max-height:80vh;overflow-y:auto;position:relative;';
-  overlay.appendChild(popup);
-
-  window.closePopup = function() { overlay.style.display = 'none'; document.body.style.overflow = ''; };
-  function closePopup() { window.closePopup(); }
-
-  window.openPopup = function(product) {
-    popup.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.07);">
-        <div><div class="mono" style="font-size:10px;color:var(--text-3);">PREISVERGLEICH</div>
-        <div class="headline" style="font-size:22px;">${product.name}</div></div>
-        <span style="cursor:pointer;font-size:22px;color:var(--text-3);" onclick="window.closePopup()">&times;</span>
-      </div>
-      <div style="padding:10px 0;">
-        ${product.shops.sort((a,b)=>a.price-b.price).map(s => `
-          <a href="${s.url}" target="_blank" rel="noopener sponsored" class="shop-row" style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,0.04);text-decoration:none;color:var(--text);">
-            <div>
-              <div style="font-weight:600;font-size:14px;">${s.name}</div>
-              <div style="font-size:11px;color:${s.inStock ? 'var(--text-2)' : '#ff4444'};margin-top:2px;">${s.inStock ? 'Auf Lager' : 'Ausverkauft'} ${s.delivery ? '· ' + s.delivery : ''}</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;" class="prod-grid">
+      {products.sort((a,b)=>b.rating - a.rating).map((p,i) => {
+        const pmin = minPrice(p.shops);
+        const slug = p.slug;
+        return (
+          <div class="card" data-cat={p.category} data-price={pmin} data-platform={p.platforms.join(',')} data-name={p.name.toLowerCase()} data-slug={slug}>
+            {p.tag && <div class="card-ribbon">{p.tag}</div>}
+            <div style="position:absolute;right:8px;top:8px;z-index:10;display:flex;gap:4px;">
+              <button class="compare-btn" data-id={p.id} title="Vergleichen" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">⚖</button>
+              <button class="fav-btn" data-id={p.id} title="Favorit" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">♡</button>
             </div>
-            <div style="text-align:right;">
-              <div class="headline" style="font-size:20px;color:var(--accent);">${fmtPrice(s.price)}</div>
-              ${s.oldPrice ? `<div class="mono" style="font-size:10px;color:var(--text-3);text-decoration:line-through;">${fmtPrice(s.oldPrice)}</div>` : ''}
+            <a href={`/simracehub-astro/produkte/${slug}/`} style="text-decoration:none;color:var(--text);display:block;">
+            <div class="card-img" style={p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : ''}>
+              {!p.image && <svg class="cat-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                {p.category==="wheelbase" && <><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></>}
+                {p.category==="wheel" && <><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4v3M12 17v3M7 7l2 2M17 17l-2-2"/></>}
+                {p.category==="pedals" && <><rect x="4" y="6" width="4" height="12" rx="1"/><rect x="10" y="4" width="4" height="14" rx="1"/><rect x="16" y="6" width="4" height="12" rx="1"/></>}
+                {p.category==="shifter" && <><circle cx="12" cy="6" r="2"/><path d="M12 8v10M8 18h8"/></>}
+                {p.category==="cockpit" && <><path d="M4 18l4-12h8l4 12M7 14h10M9 18v3M15 18v3"/></>}
+                {p.category==="monitor" && <><rect x="3" y="6" width="6" height="10" rx="0.5"/><rect x="9" y="4" width="6" height="14" rx="0.5"/><rect x="15" y="6" width="6" height="10" rx="0.5"/></>}
+                {p.category==="seat" && <><path d="M7 4h6a3 3 0 0 1 3 3v9H7zM7 16v4M16 16v4"/></>}
+                {p.category==="bundle" && <><rect x="3" y="8" width="18" height="12" rx="1"/><path d="M3 12h18M9 8v-3h6v3"/></>}
+              </svg>}
+              <div class="cat-label">{p.categoryLabel}</div>
+              <div class="live-badge">// LIVE #{String(i+2).padStart(2,'0')}</div>
             </div>
-          </a>
-        `).join('')}
+            <div style="padding:16px;flex:1;display:flex;flex-direction:column;">
+              <div class="mono" style="font-size:9px;color:var(--text-2);margin-bottom:4px;">{p.brand}</div>
+              <h3 style="font-size:15px;font-weight:600;margin:0 0 6px;">{p.name}</h3>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span class="stars">
+                  {[1,2,3,4,5].map(s => (
+                    <svg width="12" height="12" viewBox="0 0 24 24" style="display:block;">
+                      <path d="M12 2l3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z" fill={s <= Math.round(p.rating) ? "var(--accent)" : "rgba(255,255,255,0.15)"}/>
+                    </svg>
+                  ))}
+                </span>
+                <span class="mono" style="font-size:9px;color:var(--text-2);">{p.rating.toFixed(1)} ({p.reviews})</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Best für {p.bestFor}</div>
+              <div class="platforms" style="display:flex;gap:4px;margin-bottom:12px;">
+                {p.platforms.map(pl => <span class="platform-chip">{pl}</span>)}
+              </div>
+              <div style="margin-top:auto;">
+                <div style="display:flex;align-items:baseline;gap:8px;">
+                  <span class="headline" style="font-size:16px;color:var(--accent);">{fmtPrice(pmin)}</span>
+                  {p.shops.length > 1 && <span class="mono" style="font-size:9px;color:var(--text-3);">ab · {p.shops.filter(s=>s.inStock).length} Shops</span>}
+                </div>
+              </div>
+            </div>
+            </a>
+            <div style="padding:0 16px 14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;">
+                <span class="shop-count-btn btn" style="height:30px;padding:0 10px;font-size:10px;cursor:pointer;" data-slug={slug}>Preise ({p.shops.length})</span>
+                <a href={`/simracehub-astro/produkte/${slug}/`} class="btn" style="height:30px;padding:0 10px;font-size:10px;">→</a>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- FEATURE SECTIONS -->
+  <section id="features" style="padding:60px 40px;border-top:1px solid var(--line);">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <!-- Kaufberater -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">KAUFBERATER</div>
+        <div class="headline" style="font-size:28px;">Unentschieden?</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Beantworte 7 schnelle Fragen und wir zeigen dir das perfekte Setup für dein Budget.</p>
+        <a href="/simracehub-astro/quiz/" class="btn btn-primary" style="margin-top:auto;">Quiz starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
       </div>
-      <div style="padding:12px 20px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;">
-        <span class="mono" style="font-size:9px;color:var(--text-3);">* Affiliate-Links</span>
-        <a href="/simracehub-astro/produkte/${product.slug}/" class="btn" style="font-size:10px;height:32px;padding:0 12px;">Details</a>
+
+      <!-- Vergleich -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">VERGLEICHEN</div>
+        <div class="headline" style="font-size:28px;">Side-by-Side</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Wähle bis zu 4 Produkte und vergleiche Specs, Preise und Plattformen direkt nebeneinander.</p>
+        <a href="/simracehub-astro/compare/" class="btn" style="margin-top:auto;">Vergleich starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
       </div>
-    `;
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    popup.scrollTop = 0;
-  }
 
-  /* Attach popup to "Preise" buttons */
-  document.querySelectorAll('.shop-count-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      const slug = btn.closest('.card').getAttribute('href')?.split('/').filter(Boolean).pop();
-      const p = PRODUCTS.find(x => x.slug === slug);
-      if (p) openPopup(p);
-    });
-  });
+      <!-- Best of 2026 -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">BEST OF 2026</div>
+        <div class="headline" style="font-size:28px;">Die Gewinner</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Unsere Top-Picks je Kategorie — basierend auf Tests, Community-Feedback und Preis-Leistung.</p>
+        <a href="/simracehub-astro/best-of/" class="btn" style="margin-top:auto;">Top-Liste <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+      </div>
+    </div>
+  </section>
 
-  /* ---- LIVE PRICE FETCH ---- */
-  fetch('/simracehub-astro/products-live.json')
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (!data || !data.products) return;
-      const map = {};
-      for (const k in data.products) {
-        const entry = data.products[k];
-        if (entry.price) map[entry.shopKey] = entry;
-      }
-      // Update prices on cards
-      PRODUCTS.forEach(p => {
-        p.shops.forEach(s => {
-          const live = map[s.shopKey];
-          if (live && live.price) {
-            s.price = live.price;
-            s.currency = live.currency || s.currency;
-            s.inStock = live.availability === 'InStock';
-            if (live.oldPrice && live.oldPrice > live.price) s.oldPrice = live.oldPrice;
-          }
-        });
-      });
-      // Re-sort cards after price update
-      const grid = document.querySelector('.prod-grid');
-      const sorted = Array.from(cards).sort((a, b) => {
-        const pa = parseFloat(a.dataset.price), pb = parseFloat(b.dataset.price);
-        return pa - pb;
-      });
-      sorted.forEach(c => grid.appendChild(c));
-    })
-    .catch(() => { /* silent fail, static prices remain */ });
-
-  /* ==================== COMPARE / FAVORITES ==================== */
-  let compareList = JSON.parse(localStorage.getItem('srh_compare') || '[]');
-  let favList = JSON.parse(localStorage.getItem('srh_favs') || '[]');
-
-  function updateCompareBtns() {
-    document.querySelectorAll('.compare-btn').forEach(btn => {
-      const id = parseInt(btn.dataset.id);
-      btn.style.background = compareList.includes(id) ? 'var(--accent)' : 'rgba(0,0,0,0.6)';
-      btn.style.color = compareList.includes(id) ? '#fff' : 'var(--text-2)';
-    });
-  }
-
-  function updateFavBtns() {
-    document.querySelectorAll('.fav-btn').forEach(btn => {
-      const id = parseInt(btn.dataset.id);
-      btn.style.background = favList.includes(id) ? 'var(--accent)' : 'rgba(0,0,0,0.6)';
-      btn.style.color = favList.includes(id) ? '#fff' : 'var(--text-2)';
-    });
-  }
-
-  function toggleCompare(id) {
-    const idx = compareList.indexOf(id);
-    if (idx >= 0) compareList.splice(idx, 1);
-    else {
-      if (compareList.length >= 4) { alert('Max 4 Produkte im Vergleich'); return; }
-      compareList.push(id);
+  <!-- Init filters from embedded product data -->
+  <script is:inline>
+    function initFromData() {
+      const el = document.getElementById('srh-products-data');
+      if (!el) return;
+      const products = JSON.parse(el.textContent);
+      if (products.length && window.initFilters) window.initFilters(products);
     }
-    localStorage.setItem('srh_compare', JSON.stringify(compareList));
-    updateCompareBtns();
-    if (compareList.length >= 2) openCompareOverlay();
-  }
-
-  function toggleFav(id) {
-    const idx = favList.indexOf(id);
-    if (idx >= 0) favList.splice(idx, 1);
-    else favList.push(id);
-    localStorage.setItem('srh_favs', JSON.stringify(favList));
-    updateFavBtns();
-  }
-
-  window.openCompareOverlay = function() {
-    const prods = products.filter(p => compareList.includes(p.id));
-    const overlay = document.createElement('div');
-    overlay.id = 'srh-compare-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    let html = '<div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;max-width:1100px;width:100%;max-height:90vh;overflow:auto;">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:1;">';
-    html += '<div class="headline" style="font-size:20px;">Vergleich (' + prods.length + ')</div>';
-    html += '<button id="srh-close-cmp" style="background:none;border:none;color:var(--text-2);cursor:pointer;font-size:20px;">✕</button>';
-    html += '</div>';
-    html += '<div style="display:flex;">';
-    html += '<div style="width:180px;padding:16px;background:var(--panel-2);border-right:1px solid var(--line);flex-shrink:0;"></div>';
-    prods.forEach(p => {
-      html += '<div style="min-width:220px;padding:16px;border-left:1px solid var(--line);">';
-      html += '<div class="mono" style="font-size:9px;color:var(--text-3);">' + p.brand + '</div>';
-      html += '<div class="headline" style="font-size:15px;margin-bottom:8px;">' + p.name + '</div>';
-      html += '<div class="headline" style="font-size:18px;color:var(--accent);margin-bottom:4px;">' + fmtPrice(Math.min(...p.shops.filter(s=>s.inStock).map(s=>s.price))) + '</div>';
-      html += '<div style="font-size:10px;color:var(--text-3);margin-bottom:12px;">ab · ' + p.shops.length + ' Shops</div>';
-      html += '<a href="/simracehub-astro/produkte/' + p.slug + '/" class="btn btn-primary" style="font-size:10px;height:28px;">Zum Produkt →</a>';
-      html += '</div>';
-    });
-    html += '</div>';
-    ['Drehmoment','Plattform','Best für','Rating'].forEach(spec => {
-      html += '<div style="display:flex;">';
-      html += '<div style="width:180px;padding:12px 16px;background:var(--panel-2);border-top:1px solid var(--line);border-right:1px solid var(--line);font-size:11px;color:var(--text-3);flex-shrink:0;">' + spec + '</div>';
-      prods.forEach(p => {
-        let val = '-';
-        if (spec === 'Drehmoment') val = (p.specs.find(s=>s[0]==='Drehmoment')||['-'])[1];
-        else if (spec === 'Plattform') val = p.platforms.join(', ');
-        else if (spec === 'Best für') val = p.bestFor;
-        else if (spec === 'Rating') val = p.rating.toFixed(1) + ' (' + p.reviews + ')';
-        html += '<div style="min-width:220px;padding:12px 16px;border-left:1px solid var(--line);border-top:1px solid var(--line);font-size:11px;">' + val + '</div>';
-      });
-      html += '</div>';
-    });
-    html += '</div>';
-    overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-    document.getElementById('srh-close-cmp').addEventListener('click', () => overlay.remove());
-  }
-
-  window.openQuizOverlay = function() {
-    const overlay = document.createElement('div');
-    overlay.id = 'srh-quiz-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    overlay.innerHTML = '<div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;max-width:500px;width:100%;padding:32px;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">' +
-      '<div class="headline" style="font-size:20px;">Kaufberater</div>' +
-      '<button id="srh-close-quiz" style="background:none;border:none;color:var(--text-2);cursor:pointer;font-size:20px;">✕</button>' +
-      '</div>' +
-      '<div id="srh-quiz-content"></div>' +
-      '</div>';
-    document.body.appendChild(overlay);
-    document.getElementById('srh-close-quiz').addEventListener('click', () => overlay.remove());
-    quizStep1();
-  }
-
-  function quizStep1() {
-    const el = document.getElementById('srh-quiz-content');
-    el.innerHTML = '<div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;">FRAGE 1/3</div>' +
-      '<div class="headline" style="font-size:18px;margin-bottom:20px;">Was ist dein Budget?</div>' +
-      '<div style="display:flex;flex-direction:column;gap:8px;">' +
-      '<button class="btn quiz-btn" data-budget="entry" style="height:44px;justify-content:flex-start;padding:0 16px;">Bis 500€ (Einstieg)</button>' +
-      '<button class="btn quiz-btn" data-budget="mid" style="height:44px;justify-content:flex-start;padding:0 16px;">500€ - 1.000€ (Mittel)</button>' +
-      '<button class="btn quiz-btn" data-budget="high" style="height:44px;justify-content:flex-start;padding:0 16px;">Über 1.000€ (Premium)</button>' +
-      '</div>';
-    el.querySelectorAll('.quiz-btn').forEach(btn => btn.addEventListener('click', () => quizStep2(btn.dataset.budget)));
-  }
-
-  function quizStep2(budget) {
-    const el = document.getElementById('srh-quiz-content');
-    el.innerHTML = '<div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;">FRAGE 2/3</div>' +
-      '<div class="headline" style="font-size:18px;margin-bottom:20px;">Welche Plattform?</div>' +
-      '<div style="display:flex;flex-direction:column;gap:8px;">' +
-      '<button class="btn quiz-btn" data-platform="pc" style="height:44px;justify-content:flex-start;padding:0 16px;">PC</button>' +
-      '<button class="btn quiz-btn" data-platform="ps5" style="height:44px;justify-content:flex-start;padding:0 16px;">PlayStation 5</button>' +
-      '<button class="btn quiz-btn" data-platform="xbox" style="height:44px;justify-content:flex-start;padding:0 16px;">Xbox</button>' +
-      '</div>';
-    el.querySelectorAll('.quiz-btn').forEach(btn => btn.addEventListener('click', () => quizStep3(budget, btn.dataset.platform)));
-  }
-
-  function quizStep3(budget, platform) {
-    const el = document.getElementById('srh-quiz-content');
-    el.innerHTML = '<div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;">FRAGE 3/3</div>' +
-      '<div class="headline" style="font-size:18px;margin-bottom:20px;">Was suchst du?</div>' +
-      '<div style="display:flex;flex-direction:column;gap:8px;">' +
-      '<button class="btn quiz-btn" data-cat="wheelbase" style="height:44px;justify-content:flex-start;padding:0 16px;">Wheelbase</button>' +
-      '<button class="btn quiz-btn" data-cat="pedals" style="height:44px;justify-content:flex-start;padding:0 16px;">Pedale</button>' +
-      '<button class="btn quiz-btn" data-cat="wheel" style="height:44px;justify-content:flex-start;padding:0 16px;">Lenkrad</button>' +
-      '<button class="btn quiz-btn" data-cat="cockpit" style="height:44px;justify-content:flex-start;padding:0 16px;">Cockpit</button>' +
-      '</div>';
-    el.querySelectorAll('.quiz-btn').forEach(btn => btn.addEventListener('click', () => quizResult(budget, platform, btn.dataset.cat)));
-  }
-
-  function quizResult(budget, platform, cat) {
-    let candidates = products.filter(p => p.category === cat);
-    if (budget === 'entry') candidates = candidates.filter(p => Math.min(...p.shops.map(s=>s.price)) <= 500);
-    if (budget === 'mid') candidates = candidates.filter(p => { const m = Math.min(...p.shops.map(s=>s.price)); return m > 500 && m <= 1000; });
-    if (budget === 'high') candidates = candidates.filter(p => Math.min(...p.shops.map(s=>s.price)) > 1000);
-    if (platform !== 'pc') candidates = candidates.filter(p => p.platforms.includes(platform === 'ps5' ? 'PS5' : 'Xbox'));
-    candidates.sort((a,b) => b.rating - a.rating);
-    const rec = candidates[0] || products.filter(p => p.category === cat).sort((a,b) => b.rating - a.rating)[0];
-    const el = document.getElementById('srh-quiz-content');
-    if (rec) {
-      el.innerHTML = '<div style="text-align:center;padding:20px 0;">' +
-        '<div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">' + rec.brand + '</div>' +
-        '<div class="headline" style="font-size:24px;margin-bottom:12px;">' + rec.name + '</div>' +
-        '<div style="margin-bottom:16px;"><span class="stars">★★★★★</span> <span class="mono" style="font-size:12px;color:var(--text-2);">' + rec.rating.toFixed(1) + ' (' + rec.reviews + ')</span></div>' +
-        '<div class="headline" style="color:var(--accent);font-size:28px;margin-bottom:20px;">' + fmtPrice(Math.min(...rec.shops.filter(s=>s.inStock).map(s=>s.price))) + '</div>' +
-        '<a href="/simracehub-astro/produkte/' + rec.slug + '/" class="btn btn-primary" style="height:44px;padding:0 32px;font-size:13px;">Zum Bestpreis →</a>' +
-        '</div>';
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFromData);
+    } else {
+      initFromData();
     }
-  }
-
-  window.openBestOfOverlay = function() {
-    const bestCats = ['wheelbase','pedals','wheel','cockpit'];
-    const best = bestCats.map(c => {
-      const prods = products.filter(p => p.category === c);
-      return prods.sort((a,b) => b.rating - a.rating)[0];
-    }).filter(Boolean);
-    const overlay = document.createElement('div');
-    overlay.id = 'srh-bestof-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-    let html = '<div style="background:var(--bg);border:1px solid var(--line);border-radius:8px;max-width:900px;width:100%;max-height:90vh;overflow:auto;">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);">';
-    html += '<div class="headline" style="font-size:20px;">Best of 2026</div>';
-    html += '<button id="srh-close-bo" style="background:none;border:none;color:var(--text-2);cursor:pointer;font-size:20px;">✕</button>';
-    html += '</div>';
-    html += '<div style="padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">';
-    best.forEach(p => {
-      html += '<div style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;">';
-      html += '<div class="mono" style="font-size:9px;color:var(--accent);margin-bottom:8px;">' + p.categoryLabel + '</div>';
-      html += '<div class="headline" style="font-size:16px;margin-bottom:8px;">' + p.name + '</div>';
-      html += '<div style="margin-bottom:12px;"><span class="stars">★★★★★</span> <span class="mono" style="font-size:10px;color:var(--text-2);">' + p.rating.toFixed(1) + '</span></div>';
-      html += '<div class="headline" style="color:var(--accent);font-size:18px;margin-bottom:12px;">' + fmtPrice(Math.min(...p.shops.filter(s=>s.inStock).map(s=>s.price))) + '</div>';
-      html += '<a href="/simracehub-astro/produkte/' + p.slug + '/" class="btn btn-primary" style="height:32px;font-size:11px;">Ansehen →</a>';
-      html += '</div>';
-    });
-    html += '</div></div>';
-    overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-    document.getElementById('srh-close-bo').addEventListener('click', () => overlay.remove());
-  }
-
-  /* Event Delegation for Compare/Fav/Nav */
-  document.addEventListener('click', e => {
-    const compareBtn = e.target.closest('.compare-btn');
-    if (compareBtn) { e.preventDefault(); toggleCompare(parseInt(compareBtn.dataset.id)); return; }
-    const favBtn = e.target.closest('.fav-btn');
-    if (favBtn) { e.preventDefault(); toggleFav(parseInt(favBtn.dataset.id)); return; }
-    const actionLink = e.target.closest('[data-action]');
-    if (actionLink) {
-      e.preventDefault();
-      const a = actionLink.dataset.action;
-      if (a === 'quiz') openQuizOverlay();
-      else if (a === 'compare' || a === 'compare-all') { if (compareList.length >= 2) openCompareOverlay(); else alert('Wähle mind. 2 Produkte zum Vergleichen (⚖ Button auf Karten)'); }
-      else if (a === 'bestof') openBestOfOverlay();
-      return;
-    }
-  });
-
-  /* Feature section links */
-  document.querySelectorAll('#features a.btn').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const txt = link.textContent.toLowerCase();
-      if (txt.includes('quiz') || txt.includes('kaufberater')) openQuizOverlay();
-      else if (txt.includes('vergleich')) { if (compareList.length >= 2) openCompareOverlay(); else alert('Wähle mind. 2 Produkte zum Vergleichen (⚖ Button auf Produktkarten)'); }
-      else if (txt.includes('best') || txt.includes('top')) openBestOfOverlay();
-    });
-  });
-
-  /* Init */
-  updateCompareBtns();
-  updateFavBtns();
-
-  /* Close on Escape */
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); document.getElementById('srh-compare-overlay')?.remove(); document.getElementById('srh-quiz-overlay')?.remove(); document.getElementById('srh-bestof-overlay')?.remove(); } });  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
-</script>
-</body>
-</html>
+  </script>
+</BaseLayout>

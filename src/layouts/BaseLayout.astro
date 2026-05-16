@@ -1,0 +1,568 @@
+---
+// BaseLayout.astro — Einheitliches Layout für ALLE SimRaceHub Seiten
+import Navigation from '../components/Navigation.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = 'SimRaceHub',
+  description = 'Unabhängige Kaufberatung für Sim Racing.',
+  noindex = true,
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, 'https://niedigaming-ctrl.github.io').href} />
+  <link rel="canonical" href={new URL(Astro.url.pathname, 'https://niedigaming-ctrl.github.io').href} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <!-- === TOP BAR === -->
+  <div style="
+    background:#000;
+    border-bottom:1px solid var(--line);
+    padding:7px 40px;
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.16em;
+    color:var(--text-3);
+    text-transform:uppercase;
+    gap:12;
+    flex-wrap:wrap;
+  ">
+    <span class="mono" style="color:var(--accent);font-size:9px;">● Live · 10/13 Quellen gecrawlt</span>
+    <span style="color:var(--text-2);font-size:9px;">* Werbung · Affiliate-Links · Wir erhalten ggf. Provision</span>
+    <span style="font-size:9px;">DE · EUR · Versand DE/AT/CH</span>
+  </div>
+
+  <!-- === HEADER + NAVIGATION === -->
+  <header style="
+    padding:20px 40px;
+    display:flex;
+    align-items:center;
+    gap:36;
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:var(--bg);
+  ">
+    <!-- LOGO -->
+    <a href="/simracehub-astro/" class="headline" style="
+      font-size:26px;
+      display:flex;
+      align-items:center;
+      gap:12;
+      text-decoration:none;
+      color:var(--text);
+      margin:0;
+    ">
+      <svg width="34" height="22" viewBox="0 0 34 22">
+        <path d="M0 22 L8 0 L18 0 L10 22 Z" fill="var(--accent)"></path>
+        <path d="M14 22 L22 0 L32 0 L24 22 Z" fill="var(--text)"></path>
+      </svg>
+      SIM<span style="color:var(--accent);">:</span>RACEHUB
+    </a>
+
+    <!-- NAVIGATION -->
+    <Navigation />
+
+    <!-- SEARCH BAR (Desktop only) -->
+    <div class="header-search" style="flex:1;min-width:240px;max-width:340px;margin-left:auto;position:relative;">
+      <input
+        class="btn"
+        placeholder="Direct Drive unter 500€..."
+        style="width:100%;text-align:left;padding-left:36px;font-family:var(--sans);font-size:13px;background:var(--panel);cursor:text;"
+      />
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"
+        style="position:absolute;left:14px;top:12px;pointer-events:none;">
+        <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3-3"></path>
+      </svg>
+    </div>
+
+    <!-- QUIZ BUTTON -->
+    <a href="/simracehub-astro/" class="btn btn-primary header-quiz-btn" style="font-size:11px;">
+      <svg width="10" height="10" viewBox="0 0 10 10">
+        <path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+      </svg>
+      Quiz starten
+    </a>
+  </header>
+
+  <!-- === PAGE CONTENT === -->
+  <slot />
+
+  <!-- === FOOTER === -->
+  <footer style="background:var(--bg);border-top:1px solid var(--line);padding:60px 40px;">
+    <div style="max-width:980px;margin:0 auto;">
+      <div class="footer-inner" style="
+        display:flex;
+        justify-content:flex-start;
+        align-items:flex-start;
+        flex-direction:column;
+        gap:20px;
+        margin-bottom:40px;
+      ">
+        <div>
+          <div class="headline" style="font-size:20px;margin-bottom:16px;">
+            SIM<span style="color:var(--accent);">:</span>RACEHUB
+          </div>
+          <p style="color:var(--text-2);font-size:13px;max-width:400px;line-height:1.6;margin:0;">
+            Unabhängige Kaufberatung für Sim Racing. Alle Preise live von Amazon, Alternate, Caseking & mehr.
+            Wenn du über unsere Links kaufst, erhalten wir eine kleine Provision — für dich ändert sich am Preis nichts.
+          </p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:20px;">
+          <div>
+            <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;letter-spacing:0.16em;">
+              NAVIGATION
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <a href="/simracehub-astro/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Alle Produkte</a>
+              <a href="/simracehub-astro/best-of/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Best of 2026</a>
+              <a href="/simracehub-astro/quiz/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Kaufberater</a>
+              <a href="/simracehub-astro/compare/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Vergleich</a>
+              <a href="/simracehub-astro/magazin/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Magazin</a>
+            </div>
+          </div>
+          <div>
+            <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:12px;letter-spacing:0.16em;">
+              RECHTLICHES
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <a href="/simracehub-astro/impressum/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Impressum</a>
+              <a href="/simracehub-astro/datenschutz/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Datenschutz</a>
+              <a href="/simracehub-astro/affiliate-disclosure/" style="color:var(--text-2);font-size:13px;text-decoration:none;">Affiliate-Disclosure</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="
+        border-top:1px solid var(--line);
+        padding-top:20px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:12px;
+      ">
+        <span class="mono" style="font-size:9px;color:var(--text-3);">© 2026 SimRaceHub · Alle Angaben ohne Gewähr</span>
+        <span class="mono" style="font-size:9px;color:var(--text-3);">Made with 🏎️ in Germany</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- === TWEAKS PANEL === -->
+  <div id="twk-panel" style="
+    position:fixed;
+    right:16px;
+    bottom:16px;
+    z-index:9999;
+    width:240px;
+    background:rgba(17,17,17,.92);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px;
+    box-shadow:0 12px 40px rgba(0,0,0,.4);
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-2);
+    overflow:hidden;
+    display:none;
+  ">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.07);">
+      <span style="font-weight:600;color:var(--text);">Tweaks</span>
+      <span id="twk-x" style="font-size:15px;opacity:.5;cursor:pointer;"
+        onclick="document.getElementById('twk-panel').style.display='none';document.getElementById('twk-trigger').style.opacity='1';"
+      >✕</span>
+    </div>
+    <div id="twk-body" style="padding:14px;display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase;">Akzentfarbe</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="setAccent('#ff2d2d')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff2d2d;cursor:pointer;"></button>
+        <button onclick="setAccent('#ff7a00')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#ff7a00;cursor:pointer;"></button>
+        <button onclick="setAccent('#00d97e')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#00d97e;cursor:pointer;"></button>
+        <button onclick="setAccent('#3b82f6')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#3b82f6;cursor:pointer;"></button>
+        <button onclick="setAccent('#a855f7')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#a855f7;cursor:pointer;"></button>
+        <button onclick="setAccent('#fafafa')" style="width:28px;height:28px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:#fafafa;cursor:pointer;"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="twk-trigger" style="
+    position:fixed;
+    right:16px;
+    bottom:16px;
+    z-index:9998;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#0a0a0a;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:18px;
+    box-shadow:0 2px 12px rgba(255,45,45,.3);
+    transition:opacity .2s;
+  " onclick="document.getElementById('twk-panel').style.display='block';this.style.opacity='0';">⚙</div>
+
+<script>
+  // Accent color persistence
+  window.setAccent = function(c) {
+    document.documentElement.style.setProperty("--accent", c);
+    try { localStorage.setItem("srh_accent", c); } catch(e) {}
+    const t = document.getElementById("twk-trigger");
+    if (t) t.style.background = c;
+  };
+  (function() {
+    try {
+      const s = localStorage.getItem("srh_accent");
+      if (s) window.setAccent(s);
+    } catch(e) {}
+  })();
+
+  // Filter / Popup / Compare / Quiz / BestOf logic (available on all pages)
+  window.initFilters = function(products) {
+    var cards = document.querySelectorAll('.card[data-cat]');
+    var searchInput = document.querySelector('.header-search input');
+    var activeCat = 'all', activeBudget = 'all', activePlatform = 'all', searchQuery = '';
+
+    function fmtPrice(p) { return p.toLocaleString('de-DE') + ' €'; }
+    function setActive(sel, val, key) {
+      document.querySelectorAll(sel).forEach(function(p) { p.classList.toggle('active', p.dataset[key] === val); });
+    }
+    function filter() {
+      var visible = 0;
+      cards.forEach(function(card) {
+        var catMatch = activeCat === 'all' || card.dataset.cat === activeCat;
+        var price = parseFloat(card.dataset.price);
+        var budgetMatch = activeBudget === 'all';
+        if (activeBudget === 'under200') budgetMatch = price < 200;
+        else if (activeBudget === '200-500') budgetMatch = price >= 200 && price <= 500;
+        else if (activeBudget === '500-1000') budgetMatch = price > 500 && price <= 1000;
+        else if (activeBudget === '1000plus') budgetMatch = price > 1000;
+        var platMatch = activePlatform === 'all' || card.dataset.platform.toLowerCase().split(',').includes(activePlatform);
+        var searchMatch = !searchQuery || card.dataset.name.includes(searchQuery.toLowerCase());
+        var show = catMatch && budgetMatch && platMatch && searchMatch;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      var h2 = document.querySelector('h2.headline');
+      if (h2) h2.textContent = visible + ' Produkte. Handverlesen.';
+    }
+
+    if (!cards.length) return;
+    document.addEventListener('click', function(e) {
+      var pill = e.target.closest('.pill[data-cat], .pill[data-budget], .pill[data-platform]');
+      if (!pill) return;
+      if (pill.dataset.cat) { activeCat = pill.dataset.cat; setActive('.pill[data-cat]', activeCat, 'cat'); }
+      if (pill.dataset.budget) { activeBudget = pill.dataset.budget; setActive('.pill[data-budget]', activeBudget, 'budget'); }
+      if (pill.dataset.platform) { activePlatform = pill.dataset.platform; setActive('.pill[data-platform]', activePlatform, 'platform'); }
+      filter();
+    }, true);
+    if (searchInput) {
+      searchInput.addEventListener('input', function(e) { searchQuery = e.target.value; filter(); });
+    }
+
+    // Shop popup
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;display:none;justify-content:center;align-items:center;backdrop-filter:blur(4px);';
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closePopup(); });
+    document.body.appendChild(overlay);
+    var popup = document.createElement('div');
+    popup.style.cssText = 'background:#111;border:1px solid rgba(255,255,255,0.12);width:90%;max-width:520px;max-height:80vh;overflow-y:auto;position:relative;';
+    overlay.appendChild(popup);
+    window.closePopup = function() { overlay.style.display = 'none'; document.body.style.overflow = ''; };
+    function closePopup() { window.closePopup(); }
+    window.openPopup = function(product) {
+      var shops = product.shops.slice().sort(function(a,b){return a.price-b.price;});
+      popup.innerHTML = '<div style=\"display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.07);\"><div><div class=\"mono\" style=\"font-size:10px;color:var(--text-3);\">PREISVERGLEICH</div><div class=\"headline\" style=\"font-size:22px;\">'+product.name+'</div></div><span style=\"cursor:pointer;font-size:22px;color:var(--text-3);\" onclick=\"window.closePopup()\">&times;</span></div><div style=\"padding:10px 0;\">' +
+        shops.map(function(s) { return '<a href=\"'+s.url+'\" target=\"_blank\" rel=\"noopener sponsored\" class=\"shop-row\" style=\"display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,0.04);text-decoration:none;color:var(--text);\"><div><div style=\"font-weight:600;font-size:14px;\">'+s.name+'</div><div style=\"font-size:11px;color:'+(s.inStock?'var(--text-2)':'#ff4444')+';margin-top:2px;\">'+(s.inStock?'Auf Lager':'Ausverkauft')+'</div></div><div style=\"text-align:right;\"><div class=\"headline\" style=\"font-size:20px;color:var(--accent);\">'+fmtPrice(s.price)+'</div></div></a>'; }).join('') +
+        '</div><div style=\"padding:12px 20px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;\"><span class=\"mono\" style=\"font-size:9px;color:var(--text-3);\">* Affiliate-Links</span><a href=\"/simracehub-astro/produkte/'+product.slug+'/\" class=\"btn\" style=\"font-size:10px;height:32px;padding:0 12px;\">Details</a></div>';
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      popup.scrollTop = 0;
+    };
+
+    document.querySelectorAll('.shop-count-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        var slug = btn.dataset.slug;
+        var p = products.find(function(x) { return x.slug === slug; });
+        if (p) window.openPopup(p);
+      });
+    });
+
+    // ESC closes all
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.closePopup();
+        var el = document.getElementById('srh-compare-overlay'); if (el) el.remove();
+        el = document.getElementById('srh-quiz-overlay'); if (el) el.remove();
+        el = document.getElementById('srh-bestof-overlay'); if (el) el.remove();
+      }
+    });
+  };
+</script>
+
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111111;
+    --panel-2: #181818;
+    --line: rgba(255,255,255,0.07);
+    --line-2: rgba(255,255,255,0.16);
+    --text: #fafafa;
+    --text-2: #a0a0a0;
+    --text-3: #5e5e5e;
+    --accent: #ff2d2d;
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --display: 'Barlow Condensed', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #0a0a0a; }
+  img { max-width: 100%; display: block; }
+
+  /* === TYPOGRAPHY === */
+  .headline {
+    font-family: var(--display);
+    font-weight: 700;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+  }
+
+  .mono {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* === BUTTONS === */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 16px;
+    border: 1px solid var(--line-2);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--panel-2); border-color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0a;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn-primary:hover { filter: brightness(1.1); }
+
+  /* === PILLS (FILTERS) === */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .pill:hover { color: var(--text); border-color: var(--line-2); }
+  .pill.active { background: var(--text); color: #0a0a0a; border-color: var(--text); font-weight: 600; }
+
+  /* === CARDS === */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    position: relative;
+    transition: all .2s;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .card-ribbon {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    background: var(--accent);
+    color: #0a0a0a;
+    padding: 5px 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(180deg, #161616, #0d0d0d);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .card-img .cat-icon { opacity: 0.32; }
+  .card-img .cat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  .card-img .live-badge {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* === SPECS === */
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+
+  /* === SHOPS === */
+  .shop-list {
+    background: #0a0a0a;
+    border: 1px solid var(--accent);
+    z-index: 50;
+    padding: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,.6);
+    display: none;
+  }
+  .shop-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--text);
+    transition: background .12s;
+  }
+  .shop-row:last-child { border-bottom: none; }
+  .shop-row:hover { background: rgba(255,255,255,.04); }
+
+  .platform-chip {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 6px;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--text-2);
+    text-transform: uppercase;
+  }
+
+  .stars { display: inline-flex; align-items: center; gap: 2px; }
+  .star { color: rgba(255,255,255,0.15); }
+  .star.filled { color: var(--accent); }
+  .platforms { display: flex; gap: 4px; }
+
+  /* === RESPONSIVE HIDE/SHOW === */
+  #desktop-nav { display: flex !important; }
+  #menu-toggle { display: none !important; }
+  .header-search { display: block !important; }
+  .header-quiz-btn { display: inline-flex !important; }
+
+  @media (max-width: 980px) {
+    header, section, footer { padding-left: 20px !important; padding-right: 20px !important; }
+    .hero-grid { grid-template-columns: 1fr !important; }
+    .prod-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .detail-grid { grid-template-columns: 1fr !important; }
+    #menu-toggle { display: block !important; }
+    #desktop-nav { display: none !important; }
+    .header-search { display: none !important; }
+    .header-quiz-btn { display: none !important; }
+    .footer-inner { flex-direction: column !important; gap: 20px !important; }
+    .footer-links { gap: 20px !important; }
+    .footer-inner > div[style*='display:flex'] { flex-direction: column !important; }
+  }
+
+  @media (max-width: 620px) {
+    .prod-grid { grid-template-columns: 1fr !important; }
+    .headline-84 { font-size: 54px !important; }
+    .pill { font-size: 8px !important; padding: 4px 8px !important; white-space: normal !important; }
+    .filter-group { gap: 3px !important; }
+    #magazin > div > div:nth-child(2) { grid-template-columns: 1fr !important; }
+  }
+
+  #menu-toggle:hover { background: var(--panel-2); border-color: var(--accent); }
+</style>

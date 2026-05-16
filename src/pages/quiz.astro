@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Kaufberater · SimRaceHub" description="Finde das perfekte Sim-Racing-Setup in 3 Fragen.">
+  <section style="padding:60px 40px;min-height:60vh;">
+    <div style="max-width:800px;margin:0 auto;">
+      <div class="mono" style="color:var(--accent);margin-bottom:16px;">KAUFBERATER</div>
+      <h1 class="headline" style="font-size:52px;margin:0 0 20px;">Dein perfektes Setup</h1>
+      <p style="font-size:16px;color:var(--text-2);line-height:1.7;margin-bottom:40px;">
+        Beantworte 3 kurze Fragen und wir empfehlen dir die beste Hardware für dein Budget, deine Plattform und deinen Einsatzzweck.
+      </p>
+      <div id="quiz-content" style="background:var(--panel);border:1px solid var(--line);padding:40px;border-radius:8px;">
+        <style>
+          #quiz-step1, #quiz-step2, #quiz-step3, #quiz-result { display:none; }
+          #quiz-step1 { display:block; }
+          .quiz-btn { display:flex; width:100%; height:48px; align-items:center; padding:0 20px; margin-bottom:8px; border:1px solid var(--line-2); background:transparent; color:var(--text); font-family:var(--sans); font-size:15px; cursor:pointer; transition:all .15s; text-align:left; }
+          .quiz-btn:hover { background:var(--panel-2); border-color:var(--accent); }
+        </style>
+        <div id="quiz-step1">
+          <div class="mono" style="color:var(--text-3);margin-bottom:12px;">FRAGE 1/3</div>
+          <h3 class="headline" style="font-size:24px;margin-bottom:20px;">Was ist dein Budget?</h3>
+          <button class="quiz-btn" onclick="quizNext(2,{budget:'entry'})">Bis 500 € (Einsteiger)</button>
+          <button class="quiz-btn" onclick="quizNext(2,{budget:'mid'})">500 – 1.000 € (Mittelklasse)</button>
+          <button class="quiz-btn" onclick="quizNext(2,{budget:'high'})">Über 1.000 € (Premium)</button>
+        </div>
+        <div id="quiz-step2">
+          <div class="mono" style="color:var(--text-3);margin-bottom:12px;">FRAGE 2/3</div>
+          <h3 class="headline" style="font-size:24px;margin-bottom:20px;">Welche Plattform nutzt du?</h3>
+          <button class="quiz-btn" onclick="quizNext(3,{platform:'PC'})">PC</button>
+          <button class="quiz-btn" onclick="quizNext(3,{platform:'PS5'})">PlayStation 5</button>
+          <button class="quiz-btn" onclick="quizNext(3,{platform:'Xbox'})">Xbox</button>
+        </div>
+        <div id="quiz-step3">
+          <div class="mono" style="color:var(--text-3);margin-bottom:12px;">FRAGE 3/3</div>
+          <h3 class="headline" style="font-size:24px;margin-bottom:20px;">Was suchst du?</h3>
+          <button class="quiz-btn" onclick="quizFinish({cat:'wheelbase',label:'Wheelbase'})">Wheelbase (Direct Drive)</button>
+          <button class="quiz-btn" onclick="quizFinish({cat:'pedals',label:'Pedale'})">Pedale (Loadcell)</button>
+          <button class="quiz-btn" onclick="quizFinish({cat:'wheel',label:'Lenkrad'})">Lenkrad</button>
+          <button class="quiz-btn" onclick="quizFinish({cat:'cockpit',label:'Cockpit'})">Cockpit / Rig</button>
+          <button class="quiz-btn" onclick="quizFinish({cat:'bundle',label:'Bundle'})">Komplett-Setup</button>
+        </div>
+        <div id="quiz-result" style="text-align:center;"></div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    let answers = {};
+    function quizNext(step, data) {
+      Object.assign(answers, data);
+      document.querySelectorAll('#quiz-step1,#quiz-step2,#quiz-step3,#quiz-result').forEach(el => el.style.display='none');
+      document.getElementById('quiz-step'+step).style.display='block';
+    }
+    function quizFinish(data) {
+      Object.assign(answers, data);
+      document.querySelectorAll('#quiz-step1,#quiz-step2,#quiz-step3,#quiz-result').forEach(el => el.style.display='none');
+      var el = document.getElementById('quiz-result');
+      el.style.display='block';
+      fetch('/simracehub-astro/products-live.json')
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null)
+        .then(live => {
+          var candidates = PRODUCTS || [];
+          if (live && live.products) {
+            for (var k in live.products) {
+              var lp = live.products[k];
+              candidates.forEach(function(p) {
+                p.shops.forEach(function(s) {
+                  if (s.shopKey === lp.shopKey && lp.price) { s.price = lp.price; s.inStock = lp.availability === 'InStock'; }
+                });
+              });
+            }
+          }
+          candidates = candidates.filter(p => p.category === answers.cat);
+          if (answers.platform !== 'PC') candidates = candidates.filter(p => p.platforms.includes(answers.platform));
+          var b = answers.budget;
+          candidates = candidates.filter(p => {
+            var min = Math.min(...p.shops.map(s => s.price));
+            if (b === 'entry') return min <= 500;
+            if (b === 'mid') return min > 500 && min <= 1000;
+            return min > 1000;
+          });
+          candidates.sort((a,b) => b.rating - a.rating);
+          var rec = candidates[0];
+          if (!rec) {
+            candidates = PRODUCTS.filter(p => p.category === answers.cat).sort((a,b) => b.rating - a.rating);
+            rec = candidates[0];
+          }
+          if (rec) {
+            el.innerHTML = '<div class="mono" style="color:var(--accent);margin-bottom:12px;">EMPFOHLEN</div>' +
+              '<h2 class="headline" style="font-size:36px;margin-bottom:12px;">' + rec.name + '</h2>' +
+              '<div class="mono" style="color:var(--text-2);margin-bottom:8px;">' + rec.brand + ' · ' + rec.categoryLabel + '</div>' +
+              '<div class="stars" style="margin-bottom:16px;">★★★★★</div>' +
+              '<div class="headline" style="color:var(--accent);font-size:36px;margin-bottom:20px;">' +
+              (Math.min(...rec.shops.filter(s=>s.inStock).map(s=>s.price))).toLocaleString('de-DE') + ' €</div>' +
+              '<a href="/simracehub-astro/produkte/' + rec.slug + '/" class="btn btn-primary" style="height:48px;padding:0 32px;font-size:14px;">Zum Bestpreis →</a>';
+          } else {
+            el.innerHTML = '<p style="color:var(--text-2);">Keine passenden Produkte gefunden. Bitte wähle andere Kriterien.</p>';
+          }
+        });
+    }
+    var PRODUCTS = [];
+    fetch('/simracehub-astro/products-live.json').then(r => r.json()).then(d => {
+      if (d && d.products) {
+        var map = {};
+        for (var k in d.products) map[d.products[k].slug] = d.products[k];
+        if (typeof window !== 'undefined') PRODUCTS = Object.values(map);
+      }
+    }).catch(() => {});
+  </script>
+</BaseLayout>
