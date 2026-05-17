@@ -1,244 +1,795 @@
 {
+  "categories": [
+    {
+      "id": "wheelbase",
+      "label": "Wheelbases",
+      "icon": "wheelbase"
+    },
+    {
+      "id": "wheel",
+      "label": "Lenkräder",
+      "icon": "wheel"
+    },
+    {
+      "id": "pedals",
+      "label": "Pedale",
+      "icon": "pedals"
+    },
+    {
+      "id": "shifter",
+      "label": "Shifter & Handbrake",
+      "icon": "shifter"
+    },
+    {
+      "id": "cockpit",
+      "label": "Cockpits & Rigs",
+      "icon": "cockpit"
+    },
+    {
+      "id": "monitor",
+      "label": "Monitore & VR",
+      "icon": "monitor"
+    },
+    {
+      "id": "seat",
+      "label": "Sitze",
+      "icon": "seat"
+    },
+    {
+      "id": "bundle",
+      "label": "Komplett-Setups",
+      "icon": "bundle"
+    }
+  ],
   "hero": {
-    "name": "R9 V3 Lenkradbasis",
-    "badge": "BESTSELLER",
-    "blurb": "Erlebe professionelles Racing mit dem MOZA R9 V3 Direktantriebs Lenkradbasis. Bietet ein Drehmoment von 9 Nm, einen 21-Bit-Magnetencoder und einen leistungsstarken Servomotor. Hergestellt aus Aluminiu",
+    "id": 0,
+    "slug": "moza-r9-v3",
+    "name": "MOZA R9 V3 Direct Drive",
+    "brand": "MOZA Racing",
+    "category": "wheelbase",
+    "categoryLabel": "Direct-Drive Wheelbase · 9 Nm",
+    "tag": "Editor's Pick",
+    "badge": "Mai 2026",
+    "rating": 4.8,
+    "reviews": 1247,
+    "bestFor": "Fortgeschrittene Einsteiger",
+    "blurb": "Wenn du nur einmal kaufen willst: das hier. Linear, leise, kompatibel mit fast allen Quick-Releases — und mit 9 Nm Drehmoment der Sweet-Spot zwischen Realismus und Schreibtisch-Tauglichkeit.",
+    "specs": [
+      [
+        "Drehmoment",
+        "9 Nm"
+      ],
+      [
+        "Plattform",
+        "PC"
+      ],
+      [
+        "Encoder",
+        "21-bit"
+      ]
+    ],
+    "platforms": [
+      "PC"
+    ],
     "shops": [
       {
-        "name": "MOZA Racing",
-        "price": 349,
-        "inStock": false,
-        "url": "https://eu.mozaracing.com/de/products/r9-wheelbase"
+        "name": "MOZA Store",
+        "price": 569,
+        "badge": "Hersteller",
+        "inStock": true
+      },
+      {
+        "name": "Amazon.de",
+        "price": 589,
+        "badge": "Prime",
+        "inStock": true
+      },
+      {
+        "name": "Caseking",
+        "price": 599,
+        "inStock": true
+      },
+      {
+        "name": "BestSim",
+        "price": 619,
+        "inStock": false
       }
-    ]
+    ],
+    "image": "https://eu.mozaracing.com/cdn/shop/files/R9_V3-1.webp?v=1767606165"
   },
   "products": [
     {
       "id": 0,
-      "slug": "r9-v3-lenkradbasis",
-      "name": "R9 V3 Lenkradbasis",
-      "blurb": "Erlebe professionelles Racing mit dem MOZA R9 V3 Direktantriebs Lenkradbasis. Bietet ein Drehmoment von 9 Nm, einen 21-Bit-Magnetencoder und einen leistungsstarken Servomotor. Hergestellt aus Aluminiu",
-      "categoryLabel": "wheelbase",
-      "image": "https://eu.mozaracing.com/cdn/shop/files/R9_V3-1.webp?v=1767606165",
+      "slug": "moza-r9-v3",
+      "name": "MOZA R9 V3 Direct Drive",
+      "brand": "MOZA Racing",
+      "category": "wheelbase",
+      "categoryLabel": "Direct-Drive Wheelbase · 9 Nm",
+      "tag": "Editor's Pick",
+      "rating": 4.8,
+      "reviews": 1247,
+      "bestFor": "Fortgeschrittene Einsteiger",
+      "blurb": "Wenn du nur einmal kaufen willst: das hier. Linear, leise, kompatibel mit fast allen Quick-Releases — und mit 9 Nm Drehmoment der Sweet-Spot zwischen Realismus und Schreibtisch-Tauglichkeit.",
+      "platforms": [
+        "PC"
+      ],
+      "specs": [
+        [
+          "Drehmoment",
+          "9 Nm"
+        ],
+        [
+          "Plattform",
+          "PC"
+        ],
+        [
+          "Encoder",
+          "21-bit"
+        ]
+      ],
       "shops": [
         {
-          "name": "MOZA Racing",
-          "price": 349,
+          "name": "MOZA Store",
+          "price": 569,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "moza_r9",
+          "url": "https://de.moza-racing.com/products/r9-v3?ref=simracehub"
+        },
+        {
+          "name": "Amazon.de",
+          "price": 589,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "moza_r9",
+          "url": "https://de.moza-racing.com/products/r9-v3?ref=simracehub"
+        },
+        {
+          "name": "Caseking",
+          "price": 599,
+          "inStock": true,
+          "shopKey": "moza_r9",
+          "url": "https://de.moza-racing.com/products/r9-v3?ref=simracehub"
+        },
+        {
+          "name": "BestSim",
+          "price": 619,
           "inStock": false,
-          "url": "https://eu.mozaracing.com/de/products/r9-wheelbase"
+          "shopKey": "moza_r9",
+          "url": "https://de.moza-racing.com/products/r9-v3?ref=simracehub"
         }
       ],
-      "category": "wheelbase"
+      "image": "https://eu.mozaracing.com/cdn/shop/files/R9_V3-1.webp?v=1767606165"
     },
     {
       "id": 1,
-      "slug": "clubsport-dd-18-nm",
-      "name": "ClubSport DD+ (18 Nm)",
-      "blurb": "The ClubSport DD+ delivers 18 Nm of holding torque with incredible responsiveness and dynamics. FullForce technology fuses high-fidelity vibration cues with the core force feedback signal to deliver a",
-      "categoryLabel": "wheelbase",
-      "image": "https://res.cloudinary.com/fanatec-pwa/image/upload/c_fill%2Cq_auto%2Cw_96/products/Wheel-Bases/CS_DD-P/CS_DD-P-01.png",
+      "slug": "fanatec-clubsport-dd",
+      "name": "Fanatec ClubSport DD+",
+      "brand": "Fanatec",
+      "category": "wheelbase",
+      "categoryLabel": "Wheelbase · 15 Nm DD",
+      "tag": "Premium-Tipp",
+      "rating": 4.9,
+      "reviews": 612,
+      "bestFor": "Sim-Enthusiasten",
+      "platforms": [
+        "PC",
+        "Xbox",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Drehmoment",
+          "15 Nm"
+        ],
+        [
+          "Plattform",
+          "Multi"
+        ],
+        [
+          "Quick-Release",
+          "QR2"
+        ]
+      ],
       "shops": [
         {
-          "name": "Fanatec",
-          "price": 799.95,
-          "inStock": false,
-          "url": "https://www.fanatec.com/eu/en/p/wheel-bases/cs_dd+_eu/clubsport-dd-plus-eu"
+          "name": "Fanatec.com",
+          "price": 949,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "fanatec_csl_dd_plus",
+          "url": "https://www.fanatec.com/eu-de/clubsport-dd-plus-wheelbase?ref=simracehub"
+        },
+        {
+          "name": "Amazon.de",
+          "price": 989,
+          "inStock": true,
+          "shopKey": "fanatec_csl_dd_plus",
+          "url": "https://www.fanatec.com/eu-de/clubsport-dd-plus-wheelbase?ref=simracehub"
         }
       ],
-      "category": "wheelbase"
+      "image": "https://res.cloudinary.com/fanatec-pwa/image/upload/c_fill%2Cq_auto%2Cw_96/products/Wheel-Bases/CS_DD-P/CS_DD-P-01.png"
     },
     {
       "id": 2,
-      "slug": "simucube-2-sport-direct-drive-force-feedback-wheelbase",
-      "name": "Simucube 2 Sport | Direct Drive Force Feedback Wheelbase",
-      "blurb": "Simucube 2 Sport is a high end wheelbase with 17nm of torque - a luxury wheelbase to enter the Direct Drive Force Feedback sim racing club.",
-      "categoryLabel": "wheelbase",
-      "image": "https://simucube.com/app/uploads/2023/09/WB-SPORT-6-LEFT.webp",
+      "slug": "simucube-2-sport",
+      "name": "Simucube 2 Sport",
+      "brand": "Simucube",
+      "category": "wheelbase",
+      "categoryLabel": "Wheelbase · 17 Nm DD",
+      "tag": "High-End",
+      "rating": 4.8,
+      "reviews": 188,
+      "bestFor": "Pro / E-Sport",
+      "platforms": [
+        "PC"
+      ],
+      "specs": [
+        [
+          "Drehmoment",
+          "17 Nm"
+        ],
+        [
+          "Industrieller Servo",
+          "✓"
+        ],
+        [
+          "SQR Quick-Release",
+          "Inkl."
+        ]
+      ],
       "shops": [
         {
-          "name": null,
-          "price": null,
+          "name": "Simucube",
+          "price": 999,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "simucube_2_sport",
+          "url": "https://simucube.com/product/simucube-2-sport/?ref=simracehub"
+        },
+        {
+          "name": "Ricmotech",
+          "price": 1049,
+          "inStock": true,
+          "shopKey": "simucube_2_sport",
+          "url": "https://simucube.com/product/simucube-2-sport/?ref=simracehub"
+        },
+        {
+          "name": "Caseking",
+          "price": 1079,
           "inStock": false,
-          "url": "https://simucube.com/simucube-2-sport/"
+          "shopKey": "simucube_2_sport",
+          "url": "https://simucube.com/product/simucube-2-sport/?ref=simracehub"
         }
       ],
-      "category": "wheelbase"
+      "image": "https://simucube.com/app/uploads/2023/09/WB-SPORT-6-LEFT.webp"
+    },
+    {
+      "id": 3,
+      "slug": "logitech-g-pro",
+      "name": "Logitech G PRO Racing Wheel",
+      "brand": "Logitech",
+      "category": "wheel",
+      "categoryLabel": "Lenkrad · GT mit DD-Base",
+      "tag": "Bestseller",
+      "rating": 4.6,
+      "reviews": 1820,
+      "bestFor": "Konsolen-Setups",
+      "platforms": [
+        "PC",
+        "Xbox",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Drehmoment",
+          "11 Nm"
+        ],
+        [
+          "Material",
+          "Leder"
+        ],
+        [
+          "TRUEFORCE",
+          "✓"
+        ]
+      ],
+      "shops": [
+        {
+          "name": "Amazon.de",
+          "price": 999,
+          "badge": "Prime",
+          "inStock": true,
+          "url": "https://www.amazon.de/s?k=sim+racing&tag=simracehub-21"
+        },
+        {
+          "name": "MediaMarkt",
+          "price": 1029,
+          "inStock": true,
+          "url": "https://www.mediamarkt.de/?ref=simracehub"
+        },
+        {
+          "name": "Logitech.com",
+          "price": 1099,
+          "badge": "Hersteller",
+          "inStock": true,
+          "url": "https://www.logitechg.com/?ref=simracehub"
+        }
+      ]
     },
     {
       "id": 4,
-      "slug": "clubsport-steering-wheel-formula-v2-5",
-      "name": "ClubSport Steering Wheel Formula V2.5",
-      "blurb": "The ClubSport Steering Wheel Formula V2.5 is the perfect size and shape for all formula-style and single-seater race cars.",
-      "categoryLabel": "wheel",
-      "image": "https://assets.fanatec.com/image/upload/c_fill%2Cq_auto%2Cw_96/products/Steering-Wheels/CS_SWFORM_V25/CS_SWFORM_V25-01A.png",
+      "slug": "fanatec-formula-v25",
+      "name": "Fanatec Formula V2.5 X",
+      "brand": "Fanatec",
+      "category": "wheel",
+      "categoryLabel": "Lenkrad · Formula",
+      "tag": null,
+      "rating": 4.7,
+      "reviews": 412,
+      "bestFor": "Open-Wheel-Fans",
+      "platforms": [
+        "PC",
+        "Xbox",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Durchmesser",
+          "300 mm"
+        ],
+        [
+          "Material",
+          "Carbon / Alcantara"
+        ],
+        [
+          "Display",
+          "OLED"
+        ]
+      ],
       "shops": [
         {
-          "name": "Fanatec",
-          "price": 359.95,
-          "inStock": false,
-          "url": "https://www.fanatec.com/eu/en/p/steering-wheels/crd-9020012-ww/clubsport-steering-wheel-formula-v2-5"
+          "name": "Fanatec.com",
+          "price": 449,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "fanatec_formula_v25",
+          "url": "https://www.fanatec.com/eu-de/formula-v2-5-x-steering-wheel?ref=simracehub"
         }
       ],
-      "category": "wheel"
+      "image": "https://assets.fanatec.com/image/upload/c_fill%2Cq_auto%2Cw_96/products/Steering-Wheels/CS_SWFORM_V25/CS_SWFORM_V25-01A.png"
     },
     {
       "id": 5,
-      "slug": "moza-cs-v2p-lenkrad",
-      "name": "MOZA CS V2P Lenkrad",
-      "blurb": "13-Zoll-Sim-Racing-Lenkrad in voller Größe mit Rahmen aus Aluminium in Luftfahrtqualität, Griff aus Mikrofaserleder, Schaltwippen aus geschmiedetem Carbon, magnetischen Schalthebeln, RGB-Drehzahl-LEDs",
-      "categoryLabel": "wheel",
-      "image": "https://eu.mozaracing.com/cdn/shop/files/CS_V2P_Steering_Wheel-1_172595d8-cbaf-4d80-b6e4-99b80e9160f1.webp?v=1752746480",
+      "slug": "moza-cs-v2p",
+      "name": "MOZA CS V2P Wheel",
+      "brand": "MOZA Racing",
+      "category": "wheel",
+      "categoryLabel": "Lenkrad · GT3",
+      "tag": "Empfohlen",
+      "rating": 4.7,
+      "reviews": 524,
+      "bestFor": "GT3 / Endurance",
+      "platforms": [
+        "PC"
+      ],
+      "specs": [
+        [
+          "Durchmesser",
+          "290 mm"
+        ],
+        [
+          "Material",
+          "Alcantara"
+        ],
+        [
+          "Tasten",
+          "12 + 4 Encoder"
+        ]
+      ],
       "shops": [
         {
-          "name": "MOZA Racing",
-          "price": 249,
-          "inStock": false,
-          "url": "https://eu.mozaracing.com/de/products/cs-v2p-wheel"
+          "name": "Amazon.de",
+          "price": 379,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "moza_csv2p",
+          "url": "https://de.moza-racing.com/products/cs-v2p?ref=simracehub"
+        },
+        {
+          "name": "MOZA Store",
+          "price": 399,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "moza_csv2p",
+          "url": "https://de.moza-racing.com/products/cs-v2p?ref=simracehub"
+        },
+        {
+          "name": "Caseking",
+          "price": 409,
+          "inStock": true,
+          "shopKey": "moza_csv2p",
+          "url": "https://de.moza-racing.com/products/cs-v2p?ref=simracehub"
         }
       ],
-      "category": "wheel"
+      "image": "https://eu.mozaracing.com/cdn/shop/files/CS_V2P_Steering_Wheel-1_172595d8-cbaf-4d80-b6e4-99b80e9160f1.webp?v=1752746480"
     },
     {
       "id": 6,
-      "slug": "sprint-3-pedal-set-heusinkveld",
-      "name": "Sprint 3-pedal set - Heusinkveld®",
-      "blurb": "Want to improve your lap times and race with more consistency? The Sprint pedals are perfect for you! A strong, accurate, and customizable pedal set designed to elevate your race pace. If you’re looki",
-      "categoryLabel": "pedals",
-      "image": "https://cdn.heusinkveld.com/wp-content/uploads/2025/02/8719689204341-1-Sprint-3-pedal-set_1024x768.png",
+      "slug": "heusinkveld-sprint",
+      "name": "Heusinkveld Sprint Pedals",
+      "brand": "Heusinkveld",
+      "category": "pedals",
+      "categoryLabel": "Pedale · Loadcell",
+      "tag": "Editor's Pick",
+      "rating": 4.9,
+      "reviews": 802,
+      "bestFor": "Konstante Bremszeiten",
+      "platforms": [
+        "PC",
+        "Xbox",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Bremse",
+          "Loadcell 100 kg"
+        ],
+        [
+          "Pedale",
+          "3"
+        ],
+        [
+          "Material",
+          "Stahl"
+        ]
+      ],
       "shops": [
         {
-          "name": null,
-          "price": null,
-          "inStock": false,
-          "url": "https://heusinkveld.com/shop/sprint-pedals/sprint-3-pedal-set/"
+          "name": "Heusinkveld.com",
+          "price": 689,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "heusinkveld_sprint",
+          "url": "https://heusinkveld.com/product/sprint-pedals/?ref=simracehub"
+        },
+        {
+          "name": "Ricmotech",
+          "price": 729,
+          "inStock": true,
+          "shopKey": "heusinkveld_sprint",
+          "url": "https://heusinkveld.com/product/sprint-pedals/?ref=simracehub"
         }
       ],
-      "category": "pedals"
+      "image": "https://cdn.heusinkveld.com/wp-content/uploads/2025/02/8719689204341-1-Sprint-3-pedal-set_1024x768.png"
     },
     {
       "id": 7,
-      "slug": "moza-sr-p-pedalen",
-      "name": "MOZA SR-P Pedalen",
-      "blurb": "Verstellbare Sim-Racing-Pedale mit progressivem Bremsgefühl. Robuste Metallkonstruktion, Pit-House-Tuning, kompatibel mit dem MOZA-Ökosystem und PC. Weltweiter Versand.",
-      "categoryLabel": "pedals",
-      "image": "https://eu.mozaracing.com/cdn/shop/files/SR-PPedals-110-07.png?v=1767606047",
+      "slug": "moza-sr-p-lite",
+      "name": "MOZA SR-P Lite Pedals",
+      "brand": "MOZA Racing",
+      "category": "pedals",
+      "categoryLabel": "Pedale · Einsteiger Loadcell",
+      "tag": "Budget",
+      "rating": 4.5,
+      "reviews": 967,
+      "bestFor": "Erste Pedale",
+      "platforms": [
+        "PC",
+        "Xbox",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Bremse",
+          "Loadcell"
+        ],
+        [
+          "Pedale",
+          "2 (3 optional)"
+        ],
+        [
+          "Material",
+          "Stahl"
+        ]
+      ],
       "shops": [
         {
-          "name": "MOZA Racing",
-          "price": 139,
-          "inStock": false,
-          "url": "https://eu.mozaracing.com/de/products/srp-pedals"
+          "name": "Amazon.de",
+          "price": 199,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "moza_srp_lite",
+          "url": "https://de.moza-racing.com/products/sr-p-lite?ref=simracehub"
+        },
+        {
+          "name": "MOZA Store",
+          "price": 219,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "moza_srp_lite",
+          "url": "https://de.moza-racing.com/products/sr-p-lite?ref=simracehub"
         }
       ],
-      "category": "pedals"
+      "image": "https://eu.mozaracing.com/cdn/shop/files/SR-PPedals-110-07.png?v=1767606047"
     },
     {
       "id": 8,
-      "slug": "handbrake-heusinkveld",
-      "name": "Handbrake - Heusinkveld®",
-      "blurb": "When rallying or drifting, you want full control. The Handbrake is designed to offer a firm feel with adjustable resistance, simulating the behaviour of a real handbrake. The solid construction ensure",
-      "categoryLabel": "shifter",
-      "image": "https://cdn.heusinkveld.com/wp-content/uploads/2025/01/8719689204402-1-Handbrake-standing-lever_1024x768.png",
+      "slug": "heusinkveld-handbrake",
+      "name": "Heusinkveld Sim Handbrake",
+      "brand": "Heusinkveld",
+      "category": "shifter",
+      "categoryLabel": "Handbrake · Loadcell",
+      "tag": null,
+      "rating": 4.8,
+      "reviews": 142,
+      "bestFor": "Rally / Drift",
+      "platforms": [
+        "PC"
+      ],
+      "specs": [
+        [
+          "Sensor",
+          "200 kg Loadcell"
+        ],
+        [
+          "Verstellung",
+          "Härte + Winkel"
+        ]
+      ],
       "shops": [
         {
-          "name": null,
-          "price": null,
+          "name": "Heusinkveld.com",
+          "price": 369,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "heusinkveld_handbrake",
+          "url": "https://heusinkveld.com/product/sim-handbrake/?ref=simracehub"
+        },
+        {
+          "name": "Caseking",
+          "price": 389,
           "inStock": false,
-          "url": "https://heusinkveld.com/shop/handbrake-shifters/handbrake/"
+          "shopKey": "heusinkveld_handbrake",
+          "url": "https://heusinkveld.com/product/sim-handbrake/?ref=simracehub"
         }
       ],
-      "category": "shifter"
+      "image": "https://cdn.heusinkveld.com/wp-content/uploads/2025/01/8719689204402-1-Handbrake-standing-lever_1024x768.png"
     },
     {
       "id": 9,
-      "slug": "tr8-pro-v2-racing-simulator",
-      "name": "TR8 PRO V2 Racing Simulator",
-      "blurb": "Extremely rigid and fast, 45-minute assemblyBeautifully designed and extremely adjustableOptional Integrated Single and Triple Monitor StandIncludes Seat Slider Rails, Oversized Seat Brackets, Gear Sh",
-      "categoryLabel": "cockpit",
-      "image": "https://trakracer.com/cdn/shop/files/TR8_Pro_V2_s-e-cm1_01_1200x1200.webp?v=1758687555",
+      "slug": "trak-racer-tr8-pro",
+      "name": "Trak Racer TR8 PRO",
+      "brand": "Trak Racer",
+      "category": "cockpit",
+      "categoryLabel": "Cockpit · 80×40 Profil",
+      "tag": "Bestseller",
+      "rating": 4.7,
+      "reviews": 488,
+      "bestFor": "Stabile Basis",
+      "platforms": [
+        "Universal"
+      ],
+      "specs": [
+        [
+          "Material",
+          "Aluminium 80×40"
+        ],
+        [
+          "Verstellung",
+          "Komplett modular"
+        ],
+        [
+          "Max. Drehmoment",
+          "20 Nm"
+        ]
+      ],
       "shops": [
         {
-          "name": "Trak Racer",
-          "price": 699,
-          "inStock": false,
-          "url": "https://trakracer.com/products/tr8-pro-racing-simulator-1"
+          "name": "TrakRacer.com",
+          "price": 599,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "trakracer_tr8",
+          "url": "https://www.trakracer.com/products/tr8-pro-sim-racing-rig?ref=simracehub"
+        },
+        {
+          "name": "Amazon.de",
+          "price": 649,
+          "inStock": true,
+          "shopKey": "trakracer_tr8",
+          "url": "https://www.trakracer.com/products/tr8-pro-sim-racing-rig?ref=simracehub"
         }
       ],
-      "category": "cockpit"
+      "image": "https://trakracer.com/cdn/shop/files/TR8_Pro_V2_s-e-cm1_01_1200x1200.webp?v=1758687555"
     },
     {
       "id": 10,
-      "slug": "playseat-trophy-black-realistischer-robuster-rennsimulator-s",
-      "name": "Playseat® Trophy Black | Realistischer & robuster Rennsimulator-Sitz",
-      "blurb": "Playseat® Trophy Black Edition, ein Premium-Sim-Racing-Cockpit mit ActiFit-Sitz, Direct-Drive-Unterstützung und vollständig einstellbarem Setup für Profi-Racer.",
-      "categoryLabel": "seat",
-      "image": "https://www.playseat.com/cdn/shop/files/TrophyBlack-1.png?v=1778138466&width=1200",
+      "slug": "playseat-trophy",
+      "name": "Playseat Trophy",
+      "brand": "Playseat",
+      "category": "seat",
+      "categoryLabel": "Cockpit-Sitz · GT",
+      "tag": null,
+      "rating": 4.4,
+      "reviews": 256,
+      "bestFor": "Wohnzimmer-Setup",
+      "platforms": [
+        "Universal"
+      ],
+      "specs": [
+        [
+          "Material",
+          "Stahl + Stoff"
+        ],
+        [
+          "Bis Körpergröße",
+          "200 cm"
+        ]
+      ],
       "shops": [
         {
-          "name": null,
+          "name": "Amazon.de",
+          "price": 549,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "playseat_trophy",
+          "url": "https://www.playseat.com/de/playseat-trophy?ref=simracehub"
+        },
+        {
+          "name": "Playseat.com",
           "price": 599,
-          "inStock": false,
-          "url": "https://www.playseat.com/de-de/products/playseat-trophy-black"
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "playseat_trophy",
+          "url": "https://www.playseat.com/de/playseat-trophy?ref=simracehub"
         }
       ],
-      "category": "seat"
+      "image": "https://www.playseat.com/cdn/shop/files/TrophyBlack-1.png?v=1778138466&width=1200"
     },
     {
       "id": 11,
-      "slug": "34-curved-ultragear-gaming-monitor-in-21-9-mit-qhd-und-nano-",
-      "name": "34\" Curved UltraGear™ Gaming Monitor in 21:9 mit QHD+ und Nano IPS 1ms - 34GP950G-B | LG Deutschland",
-      "blurb": "Entdecken Sie LG 34GP950G-B. Für Bilder, Bewertungen und technische Daten zu LG klicken 34\" Curved UltraGear™ Gaming Monitor in 21:9 mit QHD+ und Nano IPS 1ms.",
-      "categoryLabel": "monitor",
-      "image": "https://www.lg.com/content/dam/channel/wcms/de/images/monitore/34gp950g-b_aeu_eedg_de_c/34GP950G-B_AEU_EEDG_DE_C-450x450.jpg",
+      "slug": "lg-ultragear-34",
+      "name": "LG UltraGear 34GP950G-B",
+      "brand": "LG",
+      "category": "monitor",
+      "categoryLabel": "Monitor · 34\" UWQHD",
+      "tag": null,
+      "rating": 4.6,
+      "reviews": 2104,
+      "bestFor": "Single-Monitor-Setup",
+      "platforms": [
+        "PC"
+      ],
+      "specs": [
+        [
+          "Diagonale",
+          "34\" Curved"
+        ],
+        [
+          "Auflösung",
+          "3440×1440"
+        ],
+        [
+          "Hz",
+          "160 Hz"
+        ]
+      ],
       "shops": [
         {
-          "name": null,
-          "price": null,
-          "inStock": false,
-          "url": "https://www.lg.com/de/monitore/gaming/34gp950g-b/"
+          "name": "Amazon.de",
+          "price": 799,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "lg_34gp950g",
+          "url": "https://www.amazon.de/dp/B08BCRYS3B?tag=simracehub-21"
+        },
+        {
+          "name": "Alternate",
+          "price": 829,
+          "inStock": true,
+          "shopKey": "lg_34gp950g",
+          "url": "https://www.amazon.de/dp/B08BCRYS3B?tag=simracehub-21"
+        },
+        {
+          "name": "MediaMarkt",
+          "price": 849,
+          "inStock": true,
+          "shopKey": "lg_34gp950g",
+          "url": "https://www.amazon.de/dp/B08BCRYS3B?tag=simracehub-21"
         }
       ],
-      "category": "monitor"
+      "image": "https://www.lg.com/content/dam/channel/wcms/de/images/monitore/34gp950g-b_aeu_eedg_de_c/34GP950G-B_AEU_EEDG_DE_C-450x450.jpg"
     },
     {
       "id": 12,
-      "slug": "gran-turismo-dd-pro-8-nm",
-      "name": "Gran Turismo® DD Pro (8 Nm)",
-      "blurb": "The official Direct Drive Wheel for Gran Turismo®. Combining PlayStation®5 console performance with FANATEC® Direct Drive technology for the smoothest and most dynamic force feedback sensations. Packa",
-      "categoryLabel": "bundle",
-      "image": "https://assets.fanatec.com/image/upload/c_fill%2Cq_auto%2Cw_96/products/Bundles/ready2race/CRD-9020007-8NM/CRD-9020007-8NM_01B.png",
+      "slug": "fanatec-gt-dd-pro",
+      "name": "Fanatec GT DD Pro Bundle",
+      "brand": "Fanatec",
+      "category": "bundle",
+      "categoryLabel": "Komplett-Setup · 8 Nm",
+      "tag": "Beliebteste Beratung",
+      "rating": 4.7,
+      "reviews": 1503,
+      "bestFor": "Sofort loslegen",
+      "platforms": [
+        "PC",
+        "PS5"
+      ],
+      "specs": [
+        [
+          "Inhalt",
+          "Base + Wheel + 3 Pedale"
+        ],
+        [
+          "Drehmoment",
+          "8 Nm"
+        ],
+        [
+          "Aufbau",
+          "Plug & Play"
+        ]
+      ],
       "shops": [
         {
-          "name": "Fanatec",
-          "price": 749.95,
-          "inStock": false,
-          "url": "https://www.fanatec.com/eu/en/p/sim-racing-bundles/crd-9020007-8nm-eu/gran-turismo-dd-pro-8nm-qr2l-eu"
+          "name": "Fanatec.com",
+          "price": 899,
+          "badge": "Hersteller",
+          "inStock": true,
+          "shopKey": "fanatec_gt_dd_pro_bundle",
+          "url": "https://www.fanatec.com/eu-de/gt-dd-pro-bundle?ref=simracehub"
+        },
+        {
+          "name": "Amazon.de",
+          "price": 949,
+          "badge": "Prime",
+          "inStock": true,
+          "shopKey": "fanatec_gt_dd_pro_bundle",
+          "url": "https://www.fanatec.com/eu-de/gt-dd-pro-bundle?ref=simracehub"
         }
       ],
-      "category": "bundle"
+      "image": "https://assets.fanatec.com/image/upload/c_fill%2Cq_auto%2Cw_96/products/Bundles/ready2race/CRD-9020007-8NM/CRD-9020007-8NM_01B.png"
     },
     {
       "id": 13,
-      "slug": "csl-dd-qr2-ready2race-wrc-bundle-5-nm",
-      "name": "CSL DD QR2 Ready2Race WRC Bundle (5 Nm)",
-      "blurb": "Officially licensed by the World Rally Championship (WRC), the CSL Elite Steering Wheel WRC is perfect for mastering the most demanding rally stages. This wheel will be used in official WRC Esports co",
-      "categoryLabel": "bundle",
-      "image": "https://res.cloudinary.com/fanatec-pwa/image/upload/c_fill%2Cq_auto%2Cw_96/products/Bundles/ready2race/R2R_CSL_DD_QR2_WRC_5NM/R2R_CSL_DD_QR2_WRC_5NM-01B.png",
+      "slug": "fanatec-csl-dd-wrc",
+      "name": "Fanatec CSL DD Ready2Race WRC",
+      "brand": "Fanatec",
+      "category": "bundle",
+      "categoryLabel": "Komplett-Setup · 5 Nm · Rally",
+      "tag": "Live-Daten",
+      "rating": 4.7,
+      "reviews": 318,
+      "bestFor": "Rally-Einsteiger (PC/Xbox)",
+      "platforms": [
+        "PC",
+        "Xbox"
+      ],
+      "specs": [
+        [
+          "Drehmoment",
+          "5 Nm DD"
+        ],
+        [
+          "Wheel",
+          "CSL Elite WRC (Alcantara)"
+        ],
+        [
+          "Pedale",
+          "CSL 2-Pedal"
+        ]
+      ],
       "shops": [
         {
-          "name": "Fanatec",
+          "name": "Fanatec.com",
           "price": 479.95,
-          "inStock": false,
-          "url": "https://www.fanatec.com/eu/en/p/sim-racing-bundles/r2r_csl_dd_qr2_wrc_5nm_eu/csl-dd-qr2-ready2race-wrc-bundle-5nm-eu"
+          "badge": "Hersteller · -26%",
+          "inStock": true,
+          "shopKey": "fanatec_r2r_wrc_5nm",
+          "url": "https://www.fanatec.com/eu-de/csl-dd-ready2race-wrc?ref=simracehub"
         }
       ],
-      "category": "bundle"
+      "image": "https://res.cloudinary.com/fanatec-pwa/image/upload/c_fill%2Cq_auto%2Cw_96/products/Bundles/ready2race/R2R_CSL_DD_QR2_WRC_5NM/R2R_CSL_DD_QR2_WRC_5NM-01B.png"
     }
-  ],
-  "categories": [
-    "wheelbase",
-    "wheel",
-    "pedals",
-    "cockpit"
   ]
 }

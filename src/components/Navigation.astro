@@ -3,44 +3,76 @@ const { pathname } = Astro.url;
 ---
 
 <style>
-  #desktop-nav { display: flex !important; }
-  #menu-toggle { display: none !important; }
-  .nav-link { color: var(--text-2); font-weight: 500; transition: color .15s; text-decoration: none; font-size: 13px; }
-  .nav-link:hover { color: var(--text); }
-  .nav-link.active { color: var(--text); font-weight: 700; }
+  #desktop-nav {
+    display: flex !important;
+  }
+  #menu-toggle {
+    display: none !important;
+  }
+  .nav-link {
+    color: var(--text-2);
+    font-weight: 500;
+    transition: color .15s;
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .nav-link:hover {
+    color: var(--text);
+  }
+  .nav-link.active {
+    color: var(--text);
+    font-weight: 700;
+  }
+
   @media (max-width: 980px) {
-    #menu-toggle { display: block !important; }
-    #desktop-nav { display: none !important; }
+    #menu-toggle {
+      display: block !important;
+    }
+    #desktop-nav {
+      display: none !important;
+    }
   }
 </style>
 
-<button id="menu-toggle" onclick="toggleMenu()" style="display:none;background:none;border:1px solid var(--line-2);color:var(--text);width:40px;height:40px;border-radius:6px;cursor:pointer;font-size:20px;margin-left:auto;">☰</button>
+<button
+  id="menu-toggle"
+  onclick="toggleMenu()"
+  style="display:none;background:none;border:1px solid var(--line-2);color:var(--text);width:40px;height:40px;border-radius:6px;cursor:pointer;font-size:20px;margin-left:auto;"
+>
+  ☰
+</button>
 
 <nav id="desktop-nav" style="display:flex;gap:28px;font-size:13px;color:var(--text-2);flex-wrap:wrap;margin-left:40px;">
-  <a href="/simracehub-astro/" class={`nav-link ${pathname === '/simracehub-astro/' ? 'active' : ''}`}>Alle Produkte</a>
-  <a href="/simracehub-astro/best-of/" class={`nav-link ${pathname === '/simracehub-astro/best-of/' ? 'active' : ''}`}>Best of 2026</a>
-  <a href="/simracehub-astro/quiz/" class={`nav-link ${pathname === '/simracehub-astro/quiz/' ? 'active' : ''}`}>Kaufberater</a>
-  <a href="/simracehub-astro/compare/" class={`nav-link ${pathname === '/simracehub-astro/compare/' ? 'active' : ''}`}>Vergleich</a>
-  <a href="/simracehub-astro/magazin/" class={`nav-link ${pathname.startsWith('/simracehub-astro/magazin/') ? 'active' : ''}`}>Magazin</a>
+  <a href="/simracehub-astro/" class="nav-link {pathname === '/simracehub-astro/' ? 'active' : ''}">Alle Produkte</a>
+  <a href="/simracehub-astro/best-of/" class="nav-link {pathname === '/simracehub-astro/best-of/' ? 'active' : ''}">Best of 2026</a>
+  <a href="/simracehub-astro/quiz/" class="nav-link {pathname === '/simracehub-astro/quiz/' ? 'active' : ''}">Kaufberater</a>
+  <a href="/simracehub-astro/compare/" class="nav-link {pathname === '/simracehub-astro/compare/' ? 'active' : ''}">Vergleich</a>
+  <a href="/simracehub-astro/magazin/" class="nav-link {pathname.startsWith('/simracehub-astro/magazin/') ? 'active' : ''}">Magazin</a>
 </nav>
 
-<!-- Mobile Menu -->
+<!-- Mobile Menu Overlay -->
 <div id="mobile-menu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:999;">
   <button onclick="closeMenu()" style="position:absolute;top:20px;right:40px;background:none;border:none;color:var(--text);font-size:28px;cursor:pointer;">✕</button>
-  <a href="/simracehub-astro/" class={`nav-link ${pathname === '/simracehub-astro/' ? 'active' : ''}`} onclick="closeMenu()" style="color:var(--text);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);display:block;">Alle Produkte</a>
-  <a href="/simracehub-astro/best-of/" class={`nav-link ${pathname === '/simracehub-astro/best-of/' ? 'active' : ''}`} onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);display:block;">Best of 2026</a>
-  <a href="/simracehub-astro/quiz/" class={`nav-link ${pathname === '/simracehub-astro/quiz/' ? 'active' : ''}`} onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);display:block;">Kaufberater</a>
-  <a href="/simracehub-astro/compare/" class={`nav-link ${pathname === '/simracehub-astro/compare/' ? 'active' : ''}`} onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);display:block;">Vergleich</a>
-  <a href="/simracehub-astro/magazin/" class={`nav-link ${pathname.startsWith('/simracehub-astro/magazin/') ? 'active' : ''}`} onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);display:block;">Magazin</a>
+  <a href="/simracehub-astro/" class="nav-link {pathname === '/simracehub-astro/' ? 'active' : ''}" onclick="closeMenu()" style="color:var(--text);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);">Alle Produkte</a>
+  <a href="/simracehub-astro/best-of/" class="nav-link {pathname === '/simracehub-astro/best-of/' ? 'active' : ''}" onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);">Best of 2026</a>
+  <a href="/simracehub-astro/quiz/" class="nav-link {pathname === '/simracehub-astro/quiz/' ? 'active' : ''}" onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);">Kaufberater</a>
+  <a href="/simracehub-astro/compare/" class="nav-link {pathname === '/simracehub-astro/compare/' ? 'active' : ''}" onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);">Vergleich</a>
+  <a href="/simracehub-astro/magazin/" class="nav-link {pathname.startsWith('/simracehub-astro/magazin/') ? 'active' : ''}" onclick="closeMenu()" style="color:var(--text-2);font-family:var(--display);font-size:24px;text-transform:uppercase;padding:16px 0;border-bottom:1px solid var(--line);">Magazin</a>
 </div>
 
 <script>
   function toggleMenu() {
     var m = document.getElementById('mobile-menu');
-    m.style.display = 'flex'; m.style.flexDirection = 'column'; m.style.gap = '8px'; m.style.padding = '80px 40px 40px';
+    m.style.display = 'flex';
+    m.style.flexDirection = 'column';
+    m.style.gap = '8px';
+    m.style.padding = '80px 40px 40px';
   }
   function closeMenu() {
     var m = document.getElementById('mobile-menu');
-    m.style.display = 'none'; m.style.flexDirection = ''; m.style.gap = ''; m.style.padding = '';
+    m.style.display = 'none';
+    m.style.flexDirection = '';
+    m.style.gap = '';
+    m.style.padding = '';
   }
 </script>

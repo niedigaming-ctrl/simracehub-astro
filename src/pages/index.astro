@@ -5,24 +5,18 @@ import data from '../data/products.json';
 
 function bestShop(p) {
   if (!p || !p.shops || !p.shops.length) return null;
-  const sorted = [...p.shops].sort((a,b) => (a.price || 0) - (b.price || 0));
+  const sorted = [...p.shops].sort((a,b) => a.price - b.price);
   return sorted.find(s => s.inStock) || sorted[0];
 }
-function fmtPrice(p) { return (p || 0).toLocaleString("de-DE") + " €"; }
-function minPrice(shops) { 
-  const prices = (shops || []).filter(s=>s.inStock).map(s=>s.price || 0);
-  return prices.length ? Math.min(...prices) : 0; 
-}
-function maxPrice(shops) { 
-  const prices = (shops || []).filter(s=>s.inStock).map(s=>s.price || 0);
-  return prices.length ? Math.max(...prices) : 0; 
-}
+function fmtPrice(p) { return p.toLocaleString("de-DE") + " €"; }
+function minPrice(shops) { return Math.min(...shops.filter(s=>s.inStock).map(s=>s.price)); }
+function maxPrice(shops) { return Math.max(...shops.filter(s=>s.inStock).map(s=>s.price)); }
 
 const { hero, products, categories } = data;
 const heroBest = bestShop(hero);
 const heroMin = minPrice(hero.shops);
 const heroMax = maxPrice(hero.shops);
-const productsJson = JSON.stringify(products || []);
+const productsJson = JSON.stringify(products);
 ---
 
 <BaseLayout
@@ -32,96 +26,216 @@ const productsJson = JSON.stringify(products || []);
 >
   <!-- Products data for JS -->
   <script type="application/json" id="srh-products-data">{productsJson}</script>
+  <script type="application/ld+json" is:inline>
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SimRaceHub",
+    "description": "Sim Racing Kaufberatung & Preisvergleich"
+  }
+  </script>
 
   <!-- HERO -->
   <section style="padding:40px 40px 30px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;border-bottom:1px solid var(--line);" class="hero-grid">
     <div>
       <div class="mono" style="font-size:11px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;">
         <span style="width:24px;height:1px;background:var(--accent);"></span>
-        EDITOR'S PICK · {hero.badge || 'TOP'}
+        EDITOR'S PICK · {hero.badge}
       </div>
       <h1 class="headline headline-84" style="font-size:84px;margin:0 0 18px;line-height:0.95;">
-        {hero.name ? hero.name.split(" ")[0] : ''} {hero.name ? hero.name.split(" ")[1] : ''}<br/>
-        <span style="color:var(--accent);">{hero.name ? hero.name.split(" ").slice(2).join(" ") : ''}</span>
+        {hero.name.split(" ")[0]} {hero.name.split(" ")[1]}<br/>
+        <span style="color:var(--accent);">{hero.name.split(" ").slice(2).join(" ")}</span>
       </h1>
       <p style="margin:0 0 24px;font-size:15px;color:var(--text-2);max-width:480px;line-height:1.6;">{hero.blurb}</p>
-      
       <div style="display:grid;grid-template-columns:repeat(3,auto);gap:32px;margin-bottom:32px;">
-        {(hero.specs || []).map(([k,v]) => (
+        {hero.specs.map(([k,v]) => (
           <div>
             <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;">{k}</div>
             <div class="headline" style="font-size:24px;">{v}</div>
           </div>
         ))}
       </div>
-
       <div style="display:flex;align-items:center;gap:18px;margin-bottom:24px;">
         <div>
           <div class="mono" style="font-size:10px;color:var(--text-3);letter-spacing:0.14em;text-transform:uppercase;">
-            Bestpreis · {(hero.shops || []).length} Shops
+            Bestpreis · {hero.shops.length} Shops · bei <span style="color:var(--text-2);">{heroBest?.name}</span>
           </div>
           <div style="display:flex;align-items:baseline;gap:14px;">
             <span class="headline" style="font-size:42px;color:var(--accent);">{fmtPrice(heroBest?.price || 0)}</span>
+            {hero.shops.length > 1 && <span class="mono" style="color:var(--text-3);font-size:13px;">bis {fmtPrice(heroMax)}</span>}
           </div>
         </div>
       </div>
-
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#produkte" class="btn btn-primary" style="font-size:15px;">Alle Produkte ansehen</a>
-        <a href="/simracehub-astro/quiz/" class="btn" style="font-size:15px;">Kaufberater starten →</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn btn-primary" style="height:48px;font-size:12px;">Zum Bestpreis</a>
+        <a href={`/simracehub-astro/produkte/${hero.slug}/`} class="btn" style="height:48px;">Alle {hero.shops.length} Shops
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </a>
       </div>
     </div>
-    
     <div style="position:relative;">
-      <div class="card" style="padding:0;overflow:hidden;border-radius:12px;">
-        <img src={hero.image || products[0]?.image} alt={hero.name} style="width:100%;display:block;" />
+      <div style="position:relative;z-index:1;border:1px solid var(--line-2);">
+        <div class="card-img" style={`height:420px;${hero.image ? `background-image:url('${hero.image}');background-size:cover;background-position:center;` : ''}`}>
+          {!hero.image && <svg class="cat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></svg>}
+          <div class="cat-label">{hero.categoryLabel}</div>
+          <div class="live-badge">// PRODUKTBILD</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- PRODUKTE -->
-  <section id="produkte" style="padding:60px 40px;">
-    <div style="max-width:1400px;margin:0 auto;">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:32px;">
-        <div>
-          <div class="mono" style="color:var(--accent);font-size:11px;letter-spacing:0.2em;margin-bottom:8px;">LIVE PREISE 2026</div>
-          <h2 class="headline" style="font-size:42px;margin:0;">Aktuelle Top-Produkte</h2>
+  <!-- FILTERS -->
+  <section style="padding:24px 40px;border-bottom:1px solid var(--line);">
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Kategorie</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-cat="all">Alle ({products.length})</span>
+          {categories.slice(0,6).map(c => {
+            const n = products.filter(p => p.category === c.id).length;
+            return <span class="pill" data-cat={c.id}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:.6;margin-right:4px;vertical-align:-2px;"><circle cx="12" cy="12" r="4"/></svg>{c.label} <span style="opacity:.55">{n}</span></span>;
+          })}
         </div>
-        <a href="/simracehub-astro/compare/" style="color:var(--accent);font-size:14px;">Vollständigen Vergleich →</a>
       </div>
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Budget</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-budget="all">Alle</span>
+          <span class="pill" data-budget="under200">&lt; 200 €</span>
+          <span class="pill" data-budget="200-500">200–500 €</span>
+          <span class="pill" data-budget="500-1000">500–1000 €</span>
+          <span class="pill" data-budget="1000plus">1000+ €</span>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Plattform</div>
+        <div class="filter-group" style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill active" data-platform="all">Alle</span>
+          <span class="pill" data-platform="pc">PC</span>
+          <span class="pill" data-platform="xbox">Xbox</span>
+          <span class="pill" data-platform="ps5">PS5</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;">
-        {(products || []).sort((a,b) => (b.rating || 0) - (a.rating || 0)).slice(0,12).map((p,i) => {
-          const bp = bestShop(p);
-          return (
-            <a href={`/simracehub-astro/produkte/${p.slug}/`} style="text-decoration:none;color:inherit;">
-              <div class="card" style="padding:0;height:100%;transition:transform .2s;">
-                <div style="height:220px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-                  <img src={p.image} alt={p.name} style="max-height:200px;max-width:90%;object-fit:contain;" />
-                </div>
-                <div style="padding:24px;">
-                  <div style="font-size:12px;color:var(--text-3);margin-bottom:4px;">{p.categoryLabel || p.category}</div>
-                  <h3 style="font-size:20px;line-height:1.2;margin:0 0 16px;">{p.name}</h3>
-                  
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;">
-                    <div>
-                      <div style="font-size:11px;color:var(--text-3);">ab</div>
-                      <div style="font-size:26px;font-weight:700;color:var(--accent);">{fmtPrice(bp?.price || 0)}</div>
-                    </div>
-                    <div style="text-align:right;">
-                      <div style="font-size:12px;color:var(--text-3);">{(p.shops || []).length} Shops</div>
-                    </div>
-                  </div>
+  <!-- PRODUCT GRID -->
+  <section style="padding:40px 40px 60px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;">// TOP-PICKS · Mai 2026</div>
+        <h2 class="headline" style="font-size:38px;margin:0;">{products.length} Produkte. Handverlesen.</h2>
+      </div>
+      <a href="/simracehub-astro/compare/" class="mono" style="font-size:11px;color:var(--text-2);text-decoration:none;letter-spacing:0.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;" data-action="compare-all">
+        Vollständiger Vergleich
+        <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </a>
+    </div>
 
-                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                    {(p.platforms || []).map(pl => <span class="platform-chip">{pl}</span>)}
-                  </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;" class="prod-grid">
+      {products.sort((a,b)=>b.rating - a.rating).map((p,i) => {
+        const pmin = minPrice(p.shops);
+        const slug = p.slug;
+        return (
+          <div class="card" data-cat={p.category} data-price={pmin} data-platform={p.platforms.join(',')} data-name={p.name.toLowerCase()} data-slug={slug}>
+            {p.tag && <div class="card-ribbon">{p.tag}</div>}
+            <div style="position:absolute;right:8px;top:8px;z-index:10;display:flex;gap:4px;">
+              <button class="compare-btn" data-id={p.id} title="Vergleichen" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">⚖</button>
+              <button class="fav-btn" data-id={p.id} title="Favorit" style="width:28px;height:28px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:3px;backdrop-filter:blur(4px);">♡</button>
+            </div>
+            <a href={`/simracehub-astro/produkte/${slug}/`} style="text-decoration:none;color:var(--text);display:block;">
+            <div class="card-img" style={p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : ''}>
+              {!p.image && <svg class="cat-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                {p.category==="wheelbase" && <><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 6v-3M12 21v-3M6 12H3M21 12h-3"/></>}
+                {p.category==="wheel" && <><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4v3M12 17v3M7 7l2 2M17 17l-2-2"/></>}
+                {p.category==="pedals" && <><rect x="4" y="6" width="4" height="12" rx="1"/><rect x="10" y="4" width="4" height="14" rx="1"/><rect x="16" y="6" width="4" height="12" rx="1"/></>}
+                {p.category==="shifter" && <><circle cx="12" cy="6" r="2"/><path d="M12 8v10M8 18h8"/></>}
+                {p.category==="cockpit" && <><path d="M4 18l4-12h8l4 12M7 14h10M9 18v3M15 18v3"/></>}
+                {p.category==="monitor" && <><rect x="3" y="6" width="6" height="10" rx="0.5"/><rect x="9" y="4" width="6" height="14" rx="0.5"/><rect x="15" y="6" width="6" height="10" rx="0.5"/></>}
+                {p.category==="seat" && <><path d="M7 4h6a3 3 0 0 1 3 3v9H7zM7 16v4M16 16v4"/></>}
+                {p.category==="bundle" && <><rect x="3" y="8" width="18" height="12" rx="1"/><path d="M3 12h18M9 8v-3h6v3"/></>}
+              </svg>}
+              <div class="cat-label">{p.categoryLabel}</div>
+              <div class="live-badge">// LIVE #{String(i+2).padStart(2,'0')}</div>
+            </div>
+            <div style="padding:16px;flex:1;display:flex;flex-direction:column;">
+              <div class="mono" style="font-size:9px;color:var(--text-2);margin-bottom:4px;">{p.brand}</div>
+              <h3 style="font-size:15px;font-weight:600;margin:0 0 6px;">{p.name}</h3>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span class="stars">
+                  {[1,2,3,4,5].map(s => (
+                    <svg width="12" height="12" viewBox="0 0 24 24" style="display:block;">
+                      <path d="M12 2l3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z" fill={s <= Math.round(p.rating) ? "var(--accent)" : "rgba(255,255,255,0.15)"}/>
+                    </svg>
+                  ))}
+                </span>
+                <span class="mono" style="font-size:9px;color:var(--text-2);">{p.rating.toFixed(1)} ({p.reviews})</span>
+              </div>
+              <div class="mono" style="font-size:9px;color:var(--text-3);margin-bottom:8px;">Best für {p.bestFor}</div>
+              <div class="platforms" style="display:flex;gap:4px;margin-bottom:12px;">
+                {p.platforms.map(pl => <span class="platform-chip">{pl}</span>)}
+              </div>
+              <div style="margin-top:auto;">
+                <div style="display:flex;align-items:baseline;gap:8px;">
+                  <span class="headline" style="font-size:16px;color:var(--accent);">{fmtPrice(pmin)}</span>
+                  {p.shops.length > 1 && <span class="mono" style="font-size:9px;color:var(--text-3);">ab · {p.shops.filter(s=>s.inStock).length} Shops</span>}
                 </div>
               </div>
+            </div>
             </a>
-          );
-        })}
+            <div style="padding:0 16px 14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;">
+                <span class="shop-count-btn btn" style="height:30px;padding:0 10px;font-size:10px;cursor:pointer;" data-slug={slug}>Preise ({p.shops.length})</span>
+                <a href={`/simracehub-astro/produkte/${slug}/`} class="btn" style="height:30px;padding:0 10px;font-size:10px;">→</a>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- FEATURE SECTIONS -->
+  <section id="features" style="padding:60px 40px;border-top:1px solid var(--line);">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <!-- Kaufberater -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">KAUFBERATER</div>
+        <div class="headline" style="font-size:28px;">Unentschieden?</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Beantworte 7 schnelle Fragen und wir zeigen dir das perfekte Setup für dein Budget.</p>
+        <a href="/simracehub-astro/quiz/" class="btn btn-primary" style="margin-top:auto;">Quiz starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+      </div>
+
+      <!-- Vergleich -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">VERGLEICHEN</div>
+        <div class="headline" style="font-size:28px;">Side-by-Side</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Wähle bis zu 4 Produkte und vergleiche Specs, Preise und Plattformen direkt nebeneinander.</p>
+        <a href="/simracehub-astro/compare/" class="btn" style="margin-top:auto;">Vergleich starten <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
+      </div>
+
+      <!-- Best of 2026 -->
+      <div style="background:var(--panel);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:16px;">
+        <div class="mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.16em;">BEST OF 2026</div>
+        <div class="headline" style="font-size:28px;">Die Gewinner</div>
+        <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin:0;">Unsere Top-Picks je Kategorie — basierend auf Tests, Community-Feedback und Preis-Leistung.</p>
+        <a href="/simracehub-astro/best-of/" class="btn" style="margin-top:auto;">Top-Liste <svg width="10" height="10" viewBox="0 0 10 10"><path d="M3 1 L7 5 L3 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></a>
       </div>
     </div>
   </section>
+
+  <!-- Init filters from embedded product data -->
+  <script is:inline>
+    function initFromData() {
+      const el = document.getElementById('srh-products-data');
+      if (!el) return;
+      const products = JSON.parse(el.textContent);
+      if (products.length && window.initFilters) window.initFilters(products);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFromData);
+    } else {
+      initFromData();
+    }
+  </script>
 </BaseLayout>
