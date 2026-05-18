@@ -61,12 +61,17 @@ const { pathname } = Astro.url;
 </div>
 
 <script>
-  function toggleMenu() {
+  function toggleMenu(e) {
+    if(e) e.preventDefault();
     var m = document.getElementById('mobile-menu');
-    m.style.display = 'flex';
-    m.style.flexDirection = 'column';
-    m.style.gap = '8px';
-    m.style.padding = '80px 40px 40px';
+    if(m.style.display === 'flex') {
+      closeMenu();
+    } else {
+      m.style.display = 'flex';
+      m.style.flexDirection = 'column';
+      m.style.gap = '8px';
+      m.style.padding = '80px 40px 40px';
+    }
   }
   function closeMenu() {
     var m = document.getElementById('mobile-menu');
@@ -75,4 +80,14 @@ const { pathname } = Astro.url;
     m.style.gap = '';
     m.style.padding = '';
   }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobile-menu');
+    var t = document.getElementById('menu-toggle');
+    if(m && m.style.display === 'flex' && !m.contains(e.target) && !t.contains(e.target)) {
+      closeMenu();
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape') closeMenu();
+  });
 </script>
