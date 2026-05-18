@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://niedigaming-ctrl.github.io/simracehub/sitemap.xml
